@@ -1,7 +1,7 @@
 /**
  * 
  */
-package musicVisualization;
+package prj5;
 
 /**
  * @author Saakshi Naveen
@@ -14,7 +14,7 @@ public class SongTest extends student.TestCase{
      */
     public void setUp()
     {
-        song = new Song("Pure Water", "Migos", 2018);
+        song = new Song("Pure Water", "Migos", 2018, "rap");
     }
     /**
      * tests getters and setters
@@ -30,6 +30,9 @@ public class SongTest extends student.TestCase{
         assertEquals(song.getDate(), 2018);
         song.setDate(2008);
         assertEquals(song.getDate(), 2008);
+        song.setGenre("Pop");
+        assertEquals(song.getGenre(), "Pop");
+        
     }
     /**
      * tests equals()
@@ -40,14 +43,16 @@ public class SongTest extends student.TestCase{
         assertTrue(song.equals(song));
         assertFalse(song.equals(null));
         assertFalse(song.equals("song"));
-        Song one = new Song("Pure Water", "Migos", 2018);
+        Song one = new Song("Pure Water", "Migos", 2018, "rap");
         assertTrue(song.equals(one));
-        Song two = new Song("Narcos", "Migos", 2018);
+        Song two = new Song("Narcos", "Migos", 2018, "rap");
         assertFalse(song.equals(two));
-        Song three = new Song("Pure Water", "Quavo", 2018);
+        Song three = new Song("Pure Water", "Quavo", 2018, "rap");
         assertFalse(song.equals(three));
-        Song four = new Song("Pure Water", "Migos", 2019);
+        Song four = new Song("Pure Water", "Migos", 2019, "rap");
         assertFalse(song.equals(four));
+        Song five = new Song("Pure Water", "Migos", 2019, "pop");
+        assertFalse(song.equals(five));
     }
 
 }
