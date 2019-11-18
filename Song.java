@@ -7,7 +7,7 @@ package prj5;
 public class Song {
     private String name;
     private String artist;
-    private String date;
+    private int date;
     private String genre;
 
 
@@ -21,7 +21,7 @@ public class Song {
      * @param d
      *            date of song release
      */
-    public Song(String title, String a, String d, String genre) {
+    public Song(String title, String a, int d, String genre) {
         name = title;
         artist = a;
         date = d;
@@ -34,7 +34,7 @@ public class Song {
      * 
      * @return date
      */
-    public String getDate() {
+    public int getDate() {
         return date;
     }
 
@@ -45,7 +45,7 @@ public class Song {
      * @param newDate
      *            new Date to set
      */
-    public void setDate(String newDate) {
+    public void setDate(int newDate) {
         date = newDate;
     }
 
@@ -132,9 +132,9 @@ public class Song {
         }
         else {
             Song other = (Song)obj;
-            return this.date.equals(other.date) && this.name.equals(other.name)
-                && this.artist.equals(other.artist) && this.genre.equals(
-                    other.genre);
+            return (this.date == other.date) && (this.name.equals(other.name))
+                && (this.artist.equals(other.artist)) && (this.genre.equals(
+                    other.genre));
         }
     }
 
