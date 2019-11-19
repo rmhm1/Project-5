@@ -30,10 +30,10 @@ public class SongSurveyReader {
         songs = readSongFile(file2);
         students = readStudentFile(file1);
         LinkedList<Glyph> glyphs = new LinkedList<Glyph>();
-        for (int i = 1; i < songs.getLength(); i++) {
-            glyphs.add(new Glyph(songs.getEntry(i), students));
-        }
-        calculator = new GlyphCalculator(glyphs);
+        //for (int i = 1; i < songs.getLength(); i++) {
+            //glyphs.add(new Glyph(songs.getEntry(i), students));
+        //}
+        //calculator = new GlyphCalculator(glyphs);
         this.intermediateSubmission();
     }
     /**
@@ -55,10 +55,13 @@ public class SongSurveyReader {
      */
     public LinkedList<Song> readSongFile(String songFile)
         throws FileNotFoundException {
+        LinkedList<Song> songs = new LinkedList<Song>();
         Scanner file = new Scanner(new File(songFile));
+        String[] data;
+        file.nextLine();
         while (file.hasNextLine()) {
             String line = file.nextLine();
-            String[] data = line.split(", *");
+            data = line.split(", *");
             songs.add(new Song(data[0], data[1], Integer.valueOf(data[2]),
                 data[3]));
         }
@@ -79,14 +82,15 @@ public class SongSurveyReader {
         throws FileNotFoundException {
         Scanner file = new Scanner(new File(studentFile));
         file.nextLine();
+        int id = -1;
+        RegionEnum region;
+        HobbyEnum hobby;
+        MajorEnum major = null;
+        String[] data;
+        String[] responses;
         while (file.hasNextLine()) {
-            int id = -1;
-            RegionEnum region;
-            HobbyEnum hobby;
-            MajorEnum major = null;
-            String[] responses;
             String line = file.nextLine();
-            String[] data = line.split(", *");
+            data = line.split(", *");
             if (!data[0].equalsIgnoreCase("")) {
                 id = Integer.valueOf(data[0]);
             }
@@ -100,12 +104,13 @@ public class SongSurveyReader {
 
                 responses = Arrays.copyOfRange(data, 5, data.length);
                 int index = 1;
-                for (int i = 0; i < responses.length; i++)
+                /**
+                for (int i = 5; i < data.length; i++)
                 {
                     Song song;
                     Student student = new Student(id, data[1], new Attributes(major,
                         hobby, region), responses);
-                    if (i % 2 == 0)
+                    if (i % 2 == 1)
                     {
                         song = songs.getEntry(index);
                         if (responses[i].equals("Yes"))
@@ -114,7 +119,7 @@ public class SongSurveyReader {
                             student.getHeardSongs().add(song);
                         }
                     }
-                    else if (i % 2 == 1)
+                    else if (i % 2 == 0)
                     {
                         song = songs.getEntry(index);
                         if (responses[i].equals("Yes"))
@@ -125,6 +130,7 @@ public class SongSurveyReader {
                     }
                     index++;
                 }
+                 */
                 if (!(major == null || hobby == null || region == null)) {
                     students.add(new Student(id, data[1], new Attributes(major,
                         hobby, region), responses));
@@ -200,9 +206,9 @@ public class SongSurveyReader {
      */
     private HobbyEnum getHobbyEnum(String input) {
         input.replaceAll(" ", "");
-        input.toUpperCase();
+        //input.toUpperCase();
         if (!input.equals("")) {
-            return HobbyEnum.valueOf(input);
+            return HobbyEnum.valueOf(input.toUpperCase());
         }
         else {
             return null;
