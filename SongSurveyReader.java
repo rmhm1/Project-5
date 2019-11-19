@@ -81,6 +81,9 @@ public class SongSurveyReader {
     public LinkedList<Student> readStudentFile(String studentFile)
         throws FileNotFoundException {
         Scanner file = new Scanner(new File(studentFile));
+        for (int i = 1; i <= songs.getLength(); i++) {
+            //System.out.println(i);
+        }
         file.nextLine();
         int id = -1;
         RegionEnum region;
@@ -104,14 +107,14 @@ public class SongSurveyReader {
 
                 responses = Arrays.copyOfRange(data, 5, data.length);
                 int index = 1;
-                /**
-                for (int i = 5; i < data.length; i++)
+                for (int i = 0; i < responses.length / 2; i++)
                 {
                     Song song;
                     Student student = new Student(id, data[1], new Attributes(major,
                         hobby, region), responses);
                     if (i % 2 == 1)
                     {
+                        index++;
                         song = songs.getEntry(index);
                         if (responses[i].equals("Yes"))
                         {
@@ -128,9 +131,8 @@ public class SongSurveyReader {
                             student.getLikedSongs().add(song);
                         }
                     }
-                    index++;
                 }
-                 */
+                 
                 if (!(major == null || hobby == null || region == null)) {
                     students.add(new Student(id, data[1], new Attributes(major,
                         hobby, region), responses));
