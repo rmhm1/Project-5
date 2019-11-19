@@ -3,6 +3,7 @@ package prj5;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Scanner;
 
 /**
@@ -121,7 +122,6 @@ public class SongSurveyReader {
         String[] data;
         String[] responses;
         while (file.hasNextLine()) {
-            int index2 = 1;
             String line = file.nextLine();
             data = line.split(", *");
             if (!data[0].equalsIgnoreCase("")) {
@@ -134,36 +134,30 @@ public class SongSurveyReader {
                 hobby = getHobbyEnum(data[4]);
                 //System.out.println(data[2]);
                 responses = Arrays.copyOfRange(data, 5, data.length);
-                int index = 1;
                 if (!(major == null || hobby == null || region == null)) {
-                    student = new Student(id, data[1], new Attributes(
-                        major, hobby, region), responses);
+                    student = new Student(id, data[1], new Attributes(major,
+                        hobby, region), responses);
                     System.out.println(student.getAttributes().getHobby());
                     students.add(student);
-                }
-                for (int i = 0; i < responses.length; i++) {
-                    Song song;
-                    if (i % 2 == 0) {
-                        song = songs.getEntry(index);
-                        if (responses[i].toLowerCase().equals("yes")) {
-                            song.incrementListens();
-                            students.getEntry(index2).getHeardSongs().add(song);
-                        }
-                    }
-                    else if (i % 2 == 1) {
-                        song = songs.getEntry(index);
-                        if (responses[i].toLowerCase().equals("yes")) {
-                            song.incrementLikes();
-                            students.getEntry(index2).getLikedSongs().add(song);
-                            index++;
-                            //System.out.println(student.getLikedSongs().getEntry(1).getName());
-                        }
-                    }
-                }
-                //System.out.println(students.getEntry(1).getHeardSongs().getLength());
 
+                    Iterator<Song> songIter = songs.iterator();
+                    while (songIter.hasNext()) {
+                        for (int i = 0; i < responses.length; i = i + 2) {
+                            Song current = songIter.next();
+                            if (responses[i].compareToIgnoreCase("yes") == 0) {
+                                current.incrementListens();
+                                student.getHeardSongs().add(current);
+                            }
+                            if (responses[i + 1].compareToIgnoreCase(
+                                "yes") == 0) {
+                                current.incrementLikes();
+                                student.getLikedSongs().add(current);
+                            }
+                        }
+                    }
+
+                }
             }
-            index2++;
 
         }
         file.close();
