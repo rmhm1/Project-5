@@ -35,6 +35,18 @@ public class SongTest extends student.TestCase{
         
     }
     /**
+     * tests getLikes, getListens, incrementLikes, and incrementListens
+     */
+    public void testLikesAndListens()
+    {
+        assertEquals(song.getLikes(), 0);
+        assertEquals(song.getListens(), 0);
+        song.incrementLikes();
+        song.incrementListens();
+        assertEquals(song.getLikes(), 1);
+        assertEquals(song.getListens(), 1);
+    }
+    /**
      * tests equals()
      */
     @SuppressWarnings("unlikely-arg-type")
