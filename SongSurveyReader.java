@@ -81,6 +81,32 @@ public class SongSurveyReader {
                 hobby = getHobbyEnum(data[4]);
 
                 responses = Arrays.copyOfRange(data, 5, data.length);
+                int index = 0;
+                for (int i = 5; i < responses.length; i++)
+                {
+                    Song song;
+                    Student student = new Student(id, data[1], new Attributes(major,
+                        hobby, region), responses);
+                    if (i % 2 == 1)
+                    {
+                        song = songs.get(index);
+                        if (responses[i].equals("Yes"))
+                        {
+                            song.incrementListens();
+                            student.getHeardSongs().add(song);
+                        }
+                    }
+                    else if (i % 2 == 0)
+                    {
+                        song = songs.get(index);
+                        if (responses[i].equals("Yes"))
+                        {
+                            song.incrementLikes();
+                            student.getLikedSongs().add(song);
+                        }
+                    }
+                    index++;
+                }
                 if (!(major == null || hobby == null || region == null)) {
                     students.add(new Student(id, data[1], new Attributes(major,
                         hobby, region), responses));
