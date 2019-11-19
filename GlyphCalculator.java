@@ -38,6 +38,10 @@ public class GlyphCalculator {
             Glyph current = iter.next();
             LinkedList<Attributes> fans = current.getFans();
             int[] newFans = calculateHobbyBars(fans);
+            for (int i = 0; i < newFans.length; i++)
+            {
+                System.out.println(newFans[i]);
+            }
             current.setFanBars(newFans);
             LinkedList<Attributes> listeners = current.getListeners();
             int[] newListeners = calculateHobbyBars(listeners);
@@ -97,17 +101,17 @@ public class GlyphCalculator {
             Attributes current = iter.next();
             HobbyEnum hobby = current.getHobby();
             switch (hobby) {
-                case READ:
-                    newBars[0] = newBars[0]++;
+                case READING:
+                    newBars[0] = newBars[0] + 1;
                     break;
                 case ART:
-                    newBars[1] = newBars[1]++;
+                    newBars[1] = newBars[1] + 1;
                     break;
                 case SPORTS:
-                    newBars[2] = newBars[2]++;
+                    newBars[2] = newBars[2] + 1;
                     break;
                 case MUSIC:
-                    newBars[3] = newBars[3]++;
+                    newBars[3] = newBars[3] + 1;
                     break;
                 default:
                     break;
@@ -131,16 +135,16 @@ public class GlyphCalculator {
             RegionEnum region = current.getRegion();
             switch (region) {
                 case NE_USA:
-                    newBars[0] = newBars[0]++;
+                    newBars[0] = newBars[0] + 1;
                     break;
                 case SE_USA:
-                    newBars[1] = newBars[1]++;
+                    newBars[1] = newBars[1] + 1;
                     break;
                 case OTHER_USA:
-                    newBars[2] = newBars[2]++;
+                    newBars[2] = newBars[2] + 1;
                     break;
                 case OUTSIDE_USA:
-                    newBars[3] = newBars[3]++;
+                    newBars[3] = newBars[3] + 1;
                     break;
                 default:
                     break;
@@ -165,16 +169,16 @@ public class GlyphCalculator {
             MajorEnum major = current.getMajor();
             switch (major) {
                 case CMDA_MATH:
-                    newBars[0] = newBars[0]++;
+                    newBars[0] = newBars[0] + 1;
                     break;
                 case CS:
-                    newBars[1] = newBars[1]++;
+                    newBars[1] = newBars[1] + 1;
                     break;
                 case ENG_OTHER:
-                    newBars[2] = newBars[2]++;
+                    newBars[2] = newBars[2] + 1;
                     break;
                 case OTHER:
-                    newBars[3] = newBars[3]++;
+                    newBars[3] = newBars[3] + 1;
                     break;
                 default:
                     break;
@@ -188,26 +192,40 @@ public class GlyphCalculator {
      * sorts by title
      */
     public LinkedList<Glyph> sortByTitle() {
-        for (int i = 1; i < glyphs.getLength() + 1; i++) {
-            for (int j = i; (j > 0) && glyphs.getEntry(j).getSong().getName()
-                .compareTo(glyphs.getEntry(j - 1).getSong()
-                    .getName()) < 0; j--) {
-                glyphs.swap(j, j - 1);
+        Iterator <Glyph> iter = glyphs.iterator();
+        int counter = 0;
+        while (iter.hasNext())
+        {
+        Glyph current = iter.next();
+        counter++;
+        
+            for (int i = counter; i <= glyphs.getLength(); i++)
+               if ( current.getSong().getName().compareTo(glyphs.
+                   getEntry(i).getSong() .getName()) < 0 ){
+                glyphs.swap(counter, i);
             }
         }
         return glyphs;
     }
+    
 
 
     /**
      * sorts by genre
      */
     public LinkedList<Glyph> sortByGenre() {
-        for (int i = 1; i < glyphs.getLength() + 1; i++) {
-            for (int j = i; (j > 0) && glyphs.getEntry(j).getSong().getGenre()
-                .compareTo(glyphs.getEntry(j - 1).getSong()
-                    .getGenre()) < 0; j--) {
-                glyphs.swap(j, j - 1);
+        
+        Iterator <Glyph> iter = glyphs.iterator();
+        int counter = 0;
+        while (iter.hasNext())
+        {
+        Glyph current = iter.next();
+        counter++;
+        
+            for (int i = counter; i <= glyphs.getLength(); i++)
+               if ( current.getSong().getGenre().compareTo(glyphs.
+                   getEntry(i).getSong() .getGenre()) < 0 ){
+                glyphs.swap(counter, i);
             }
         }
         return glyphs;

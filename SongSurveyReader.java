@@ -42,12 +42,15 @@ public class SongSurveyReader {
      * Prints what is needed for Intermediate Submission
      */
     public void intermediateSubmission() {
-        calculator.byHobby();
-        LinkedList<Glyph> glyph = calculator.sortByGenre();
-        for (int i = 1; i < glyph.getLength(); i++) {
-            Song song = glyph.getEntry(i).getSong();
-            int[] fan = glyph.getEntry(i).getFanBars();
-            int[] listener = glyph.getEntry(i).getListenerBars();
+        LinkedList<Glyph> glyphs = calculator.byHobby();
+        glyphs = calculator.sortByGenre();
+        
+        Iterator<Glyph> glyphIter = glyphs.iterator();
+        while (glyphIter.hasNext()) {
+             Glyph current = glyphIter.next();
+             Song song = current.getSong();
+            int[] fan = current.getFanBars();
+            int[] listener = current.getListenerBars();
             System.out.println("song title " + song.getName());
             System.out.println("song genre " + song.getGenre());
             System.out.println("song year " + song.getDate());
@@ -58,11 +61,13 @@ public class SongSurveyReader {
             System.out.println("reading" + fan[0] + " art" + fan[1]
                 + " sports" + fan[2] + " music" + fan[3]);
         }
-        glyph = calculator.sortByTitle();
-        for (int i = 1; i < glyph.getLength(); i++) {
-            Song song = glyph.getEntry(i).getSong();
-            int[] fan = glyph.getEntry(i).getFanBars();
-            int[] listener = glyph.getEntry(i).getListenerBars();
+        glyphs = calculator.sortByTitle();
+        glyphIter = glyphs.iterator();
+        while (glyphIter.hasNext()) {
+            Glyph current = glyphIter.next();
+            Song song = current.getSong();
+            int[] fan = current.getFanBars();
+            int[] listener = current.getListenerBars();
             System.out.println("song title " + song.getName());
             System.out.println("song genre " + song.getGenre());
             System.out.println("song year " + song.getDate());
@@ -124,6 +129,7 @@ public class SongSurveyReader {
         while (file.hasNextLine()) {
             String line = file.nextLine();
             data = line.split(", *");
+            
             if (!data[0].equalsIgnoreCase("")) {
                 id = Integer.valueOf(data[0]);
             }
@@ -132,12 +138,11 @@ public class SongSurveyReader {
                 major = getMajorEnum(data[2]);
                 region = getRegionEnum(data[3]);
                 hobby = getHobbyEnum(data[4]);
-                //System.out.println(data[2]);
+                
                 responses = Arrays.copyOfRange(data, 5, data.length);
                 if (!(major == null || hobby == null || region == null)) {
                     student = new Student(id, data[1], new Attributes(major,
                         hobby, region), responses);
-                    System.out.println(student.getAttributes().getHobby());
                     students.add(student);
 
                     Iterator<Song> songIter = songs.iterator();
@@ -210,7 +215,7 @@ public class SongSurveyReader {
             case ("southeast"):
                 return RegionEnum.SE_USA;
             // break;
-            case ("unitedstates(otherthansoutheastornorthwest"):
+            case ("unitedstates(otherthansoutheastornorthwest)"):
                 return RegionEnum.OTHER_USA;
             case ("outsideofunitedstates"):
                 return RegionEnum.OUTSIDE_USA;
@@ -229,7 +234,7 @@ public class SongSurveyReader {
      */
     private HobbyEnum getHobbyEnum(String input) {
         input = input.replaceAll(" ", "");
-        // input.toUpperCase();
+        input = input.toUpperCase();
         if (!input.equals("")) {
             return HobbyEnum.valueOf(input.toUpperCase());
         }
