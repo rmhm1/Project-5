@@ -13,6 +13,7 @@ public class SongSurveyReader {
 
     private LinkedList<Student> students;
     private LinkedList<Song> songs;
+    private GlyphCalculator calculator;
 
 
     /**
@@ -28,6 +29,19 @@ public class SongSurveyReader {
         throws FileNotFoundException {
         songs = readSongFile(file2);
         students = readStudentFile(file1);
+        LinkedList<Glyph> glyphs = new LinkedList<Glyph>();
+        for (int i = 1; i < songs.getLength(); i++) {
+            glyphs.add(new Glyph(songs.getEntry(i), students));
+        }
+        calculator = new GlyphCalculator(glyphs);
+        this.intermediateSubmission();
+    }
+    /**
+     * Prints what is needed for Intermediate Submission
+     */
+    public void intermediateSubmission() {
+        //
+        
     }
 
 
@@ -85,7 +99,7 @@ public class SongSurveyReader {
                 hobby = getHobbyEnum(data[4]);
 
                 responses = Arrays.copyOfRange(data, 5, data.length);
-                int index = 0;
+                int index = 1;
                 for (int i = 0; i < responses.length; i++)
                 {
                     Song song;
