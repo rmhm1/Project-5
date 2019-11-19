@@ -10,7 +10,10 @@ package prj5;
 import java.util.Iterator;
 
 /**
- * 
+ * Glyph object for  song, includes a list of listener
+ * and fan attributes as well as int arrays for the number students
+ * in each category of major, hobby, or region, which can be changed
+ * and accessed.
  * 
  * @author Emily Swanson (emiswan)
  * @version 2019.11.17
@@ -36,8 +39,8 @@ public class Glyph {
      */
     public Glyph(Song song, LinkedList<Student> students) {
         this.song = song;
-        fanBars = new int[3];
-        listenerBars = new int[3];
+        fanBars = new int[4];
+        listenerBars = new int[4];
         Iterator<Student> iter = students.iterator();
         while (iter.hasNext()) {
             Student current = iter.next();
