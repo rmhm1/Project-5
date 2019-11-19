@@ -82,23 +82,23 @@ public class SongSurveyReader {
 
                 responses = Arrays.copyOfRange(data, 5, data.length);
                 int index = 0;
-                for (int i = 5; i < data.length; i++)
+                for (int i = 0; i < responses.length; i++)
                 {
                     Song song;
                     Student student = new Student(id, data[1], new Attributes(major,
                         hobby, region), responses);
-                    if (i % 2 == 1)
+                    if (i % 2 == 0)
                     {
-                        song = songs.get(index);
+                        song = songs.getEntry(index);
                         if (responses[i].equals("Yes"))
                         {
                             song.incrementListens();
                             student.getHeardSongs().add(song);
                         }
                     }
-                    else if (i % 2 == 0)
+                    else if (i % 2 == 1)
                     {
-                        song = songs.get(index);
+                        song = songs.getEntry(index);
                         if (responses[i].equals("Yes"))
                         {
                             song.incrementLikes();
