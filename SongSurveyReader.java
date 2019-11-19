@@ -82,7 +82,7 @@ public class SongSurveyReader {
 
                 responses = Arrays.copyOfRange(data, 5, data.length);
                 int index = 0;
-                for (int i = 5; i < responses.length; i++)
+                for (int i = 5; i < data.length; i++)
                 {
                     Song song;
                     Student student = new Student(id, data[1], new Attributes(major,
