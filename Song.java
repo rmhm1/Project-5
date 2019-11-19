@@ -9,6 +9,8 @@ public class Song {
     private String artist;
     private int date;
     private String genre;
+    private int numLikes;
+    private int numListens;
 
 
     /**
@@ -26,8 +28,39 @@ public class Song {
         artist = a;
         date = d;
         this.genre = genre;
+        numLikes = 0;
+        numListens = 0;
     }
-
+    /**
+     * increments listens
+     */
+    public void incrementListens()
+    {
+        numListens++;
+    }
+    /**
+     * increments likes
+     */
+    public void incrementLikes()
+    {
+        numLikes++;
+    }
+    /**
+     * gets listens
+     * @return numListens
+     */
+    public int getListens()
+    {
+        return numListens;
+    }
+    /**
+     * gets likes 
+     * @return numLikes
+     */
+    public int getLikes()
+    {
+        return numLikes;
+    }
 
     /**
      * gets date
