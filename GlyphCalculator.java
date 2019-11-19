@@ -93,6 +93,8 @@ public class GlyphCalculator {
             for (int j = i; (j > 0) && glyphs.getEntry(j).getSong().getName()
                 .compareTo(glyphs.getEntry(j - 1).getSong()
                     .getName()) < 0; j--) {
+                Glyph g = glyphs.getEntry(j - 1);
+                Glyph g2 = glyphs.getEntry(j);
                 glyphs.replace(j, g);
                 glyphs.replace(j - 1, g2);
             }
@@ -109,6 +111,8 @@ public class GlyphCalculator {
             for (int j = i; (j > 0) && glyphs.getEntry(j).getSong().getGenre()
                 .compareTo(glyphs.getEntry(j - 1).getSong()
                     .getGenre()) < 0; j--) {
+                Glyph g = glyphs.getEntry(j - 1);
+                Glyph g2 = glyphs.getEntry(j);
                 glyphs.replace(j, g);
                 glyphs.replace(j - 1, g2);
             }
