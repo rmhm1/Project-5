@@ -89,11 +89,12 @@ public class GlyphCalculator {
      * sorts by title
      */
     public LinkedList<Glyph> sortByTitle() {
-        for (int i = 1; i < glyphs.getLength(); i++) {
+        for (int i = 1; i < glyphs.getLength() + 1; i++) {
             for (int j = i; (j > 0) && glyphs.getEntry(j).getSong().getName()
                 .compareTo(glyphs.getEntry(j - 1).getSong()
                     .getName()) < 0; j--) {
-                glyphs.swap(j, j - 1);
+                glyphs.replace(j, g);
+                glyphs.replace(j - 1, g2);
             }
         }
         return glyphs;
@@ -104,11 +105,12 @@ public class GlyphCalculator {
      * sorts by genre
      */
     public LinkedList<Glyph> sortByGenre() {
-        for (int i = 1; i < glyphs.getLength(); i++) {
+        for (int i = 1; i < glyphs.getLength() + 1; i++) {
             for (int j = i; (j > 0) && glyphs.getEntry(j).getSong().getGenre()
                 .compareTo(glyphs.getEntry(j - 1).getSong()
                     .getGenre()) < 0; j--) {
-                glyphs.swap(j, j - 1);
+                glyphs.replace(j, g);
+                glyphs.replace(j - 1, g2);
             }
         }
         return glyphs;
