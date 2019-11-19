@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Scanner;
+
 /**
  * Reads the input files and converts assessment and song data into objects
+ * 
  * @author ryland
  * @version 2019.11.18
  */
@@ -29,19 +31,47 @@ public class SongSurveyReader {
         throws FileNotFoundException {
         songs = readSongFile(file2);
         students = readStudentFile(file1);
-        LinkedList<Glyph> glyphs = new LinkedList<Glyph>();
-        //for (int i = 1; i < songs.getLength(); i++) {
-            //glyphs.add(new Glyph(songs.getEntry(i), students));
-        //}
-        //calculator = new GlyphCalculator(glyphs);
+        //System.out.println(students.getEntry(1).getHeardSongs().getLength());
+        calculator = new GlyphCalculator(students, songs);
         this.intermediateSubmission();
     }
+
+
     /**
      * Prints what is needed for Intermediate Submission
      */
     public void intermediateSubmission() {
-        //
-        
+        calculator.byHobby();
+        LinkedList<Glyph> glyph = calculator.sortByGenre();
+        for (int i = 1; i < glyph.getLength(); i++) {
+            Song song = glyph.getEntry(i).getSong();
+            int[] fan = glyph.getEntry(i).getFanBars();
+            int[] listener = glyph.getEntry(i).getListenerBars();
+            System.out.println("song title " + song.getName());
+            System.out.println("song genre " + song.getGenre());
+            System.out.println("song year " + song.getDate());
+            System.out.println("heard");
+            System.out.println("reading" + listener[0] + " art" + listener[1]
+                + " sports" + listener[2] + " music" + listener[3]);
+            System.out.println("likes");
+            System.out.println("reading" + fan[0] + " art" + fan[1]
+                + " sports" + fan[2] + " music" + fan[3]);
+        }
+        glyph = calculator.sortByTitle();
+        for (int i = 1; i < glyph.getLength(); i++) {
+            Song song = glyph.getEntry(i).getSong();
+            int[] fan = glyph.getEntry(i).getFanBars();
+            int[] listener = glyph.getEntry(i).getListenerBars();
+            System.out.println("song title " + song.getName());
+            System.out.println("song genre " + song.getGenre());
+            System.out.println("song year " + song.getDate());
+            System.out.println("heard");
+            System.out.println("reading" + listener[0] + " art" + listener[1]
+                + " sports" + listener[2] + " music" + listener[3]);
+            System.out.println("likes");
+            System.out.println("reading" + fan[0] + " art" + fan[1]
+                + " sports" + fan[2] + " music" + fan[3]);
+        }
     }
 
 
@@ -81,63 +111,59 @@ public class SongSurveyReader {
     public LinkedList<Student> readStudentFile(String studentFile)
         throws FileNotFoundException {
         Scanner file = new Scanner(new File(studentFile));
-        for (int i = 1; i <= songs.getLength(); i++) {
-            //System.out.println(i);
-        }
+        LinkedList<Student> students = new LinkedList<Student>();
         file.nextLine();
         int id = -1;
+        Student student;
         RegionEnum region;
         HobbyEnum hobby;
-        MajorEnum major = null;
+        MajorEnum major;
         String[] data;
         String[] responses;
         while (file.hasNextLine()) {
+            int index2 = 1;
             String line = file.nextLine();
             data = line.split(", *");
             if (!data[0].equalsIgnoreCase("")) {
                 id = Integer.valueOf(data[0]);
             }
 
-            if (data.length >= 3) {
-                major = getMajorEnum(data[2]);
-            }
             if (data.length >= 4) {
+                major = getMajorEnum(data[2]);
                 region = getRegionEnum(data[3]);
                 hobby = getHobbyEnum(data[4]);
-
+                //System.out.println(data[2]);
                 responses = Arrays.copyOfRange(data, 5, data.length);
                 int index = 1;
-                for (int i = 0; i < responses.length / 2; i++)
-                {
-                    Song song;
-                    Student student = new Student(id, data[1], new Attributes(major,
-                        hobby, region), responses);
-                    if (i % 2 == 1)
-                    {
-                        index++;
-                        song = songs.getEntry(index);
-                        if (responses[i].equals("Yes"))
-                        {
-                            song.incrementListens();
-                            student.getHeardSongs().add(song);
-                        }
-                    }
-                    else if (i % 2 == 0)
-                    {
-                        song = songs.getEntry(index);
-                        if (responses[i].equals("Yes"))
-                        {
-                            song.incrementLikes();
-                            student.getLikedSongs().add(song);
-                        }
-                    }
-                }
-                 
                 if (!(major == null || hobby == null || region == null)) {
-                    students.add(new Student(id, data[1], new Attributes(major,
-                        hobby, region), responses));
+                    student = new Student(id, data[1], new Attributes(
+                        major, hobby, region), responses);
+                    System.out.println(student.getAttributes().getHobby());
+                    students.add(student);
                 }
+                for (int i = 0; i < responses.length; i++) {
+                    Song song;
+                    if (i % 2 == 0) {
+                        song = songs.getEntry(index);
+                        if (responses[i].toLowerCase().equals("yes")) {
+                            song.incrementListens();
+                            students.getEntry(index2).getHeardSongs().add(song);
+                        }
+                    }
+                    else if (i % 2 == 1) {
+                        song = songs.getEntry(index);
+                        if (responses[i].toLowerCase().equals("yes")) {
+                            song.incrementLikes();
+                            students.getEntry(index2).getLikedSongs().add(song);
+                            index++;
+                            //System.out.println(student.getLikedSongs().getEntry(1).getName());
+                        }
+                    }
+                }
+                //System.out.println(students.getEntry(1).getHeardSongs().getLength());
+
             }
+            index2++;
 
         }
         file.close();
@@ -153,8 +179,8 @@ public class SongSurveyReader {
      * @return Proper enum
      */
     private MajorEnum getMajorEnum(String input) {
-        input.replaceAll(" ", "");
-        input.toLowerCase();
+        input = input.replaceAll(" ", "");
+        input = input.toLowerCase();
         switch (input) {
             case ("computerscience"):
                 return MajorEnum.CS;
@@ -180,8 +206,9 @@ public class SongSurveyReader {
      * @return Proper enum
      */
     private RegionEnum getRegionEnum(String input) {
-        input.replaceAll(" ", "");
-        input.toLowerCase();
+        input = input.replaceAll(" ", "");
+        input = input.toLowerCase();
+        
         switch (input) {
             case ("northeast"):
                 return RegionEnum.NE_USA;
@@ -207,8 +234,8 @@ public class SongSurveyReader {
      * @return the proper enum
      */
     private HobbyEnum getHobbyEnum(String input) {
-        input.replaceAll(" ", "");
-        //input.toUpperCase();
+        input = input.replaceAll(" ", "");
+        // input.toUpperCase();
         if (!input.equals("")) {
             return HobbyEnum.valueOf(input.toUpperCase());
         }
