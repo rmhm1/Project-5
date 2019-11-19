@@ -4,7 +4,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Scanner;
-
+/**
+ * Reads the input files and converts assessment and song data into objects
+ * @author ryland
+ * @version 2019.11.18
+ */
 public class SongSurveyReader {
 
     private LinkedList<Student> students;
