@@ -181,6 +181,7 @@ public class GlyphCalculator {
                     break;
             }
         }
+        newBars = convertToPercentage(newBars, SongSurveyReader.regions);
       return newBars;
     }
 
@@ -199,13 +200,13 @@ public class GlyphCalculator {
             Attributes current = iter.next();
             MajorEnum major = current.getMajor();
             switch (major) {
-                case CMDA_MATH:
+                case CS:
                     newBars[0] = newBars[0] + 1;
                     break;
-                case CS:
+                case ENG_OTHER:
                     newBars[1] = newBars[1] + 1;
                     break;
-                case ENG_OTHER:
+                case CMDA_MATH:
                     newBars[2] = newBars[2] + 1;
                     break;
                 case OTHER:
@@ -215,8 +216,9 @@ public class GlyphCalculator {
                     break;
             }
         }
-        
-        return convertToPercentage(newBars, SongSurveyReader.majors);
+        newBars = convertToPercentage(newBars, SongSurveyReader.majors);
+        System.out.println(newBars[2]);
+        return newBars;
     }
 
 
@@ -228,16 +230,30 @@ public class GlyphCalculator {
         int counter = 0;
         while (iter.hasNext()) {
             Glyph current = iter.next();
+            char[] currName = current.getSong().getName().toCharArray();
             counter++;
 
-            for (int i = counter; i <= glyphs.getLength(); i++) {
-                String currentName = current.getSong().getName();
-                currentName = currentName.substring(0, 1);
-                String otherName = glyphs.getEntry(i).getSong().getName();
-                otherName = otherName.substring(0, 1);
-                if (currentName.compareTo(otherName) > 0) {
-                    glyphs.swap(counter, i);
+            for (int i = 1; i <= glyphs.getLength(); i++) {
+                char[] otherName =  glyphs.getEntry(i).getSong().getName().toCharArray();
+                int len = Math.min(currName.length, otherName.length);
+                int j = 0;
+                boolean match = true;
+                while(match && j < len )
+                {
+                    if (otherName[j] == currName[j] )
+                    {
+                        j++;
+                    }
+                    else 
+                    {
+                        if (currName[j] < otherName[j] ) {
+                            glyphs.swap(i, counter);
+                    }
+                        match = false;
+                    }
                 }
+                
+                
             }
 
         }
@@ -254,19 +270,103 @@ public class GlyphCalculator {
         int counter = 0;
         while (iter.hasNext()) {
             Glyph current = iter.next();
+            char[] currGen = current.getSong().getGenre().toCharArray();
             counter++;
 
-            for (int i = counter; i <= glyphs.getLength(); i++) {
-                String currentGenre = current.getSong().getGenre();
-                currentGenre = currentGenre.substring(0, 1);
-                String otherGenre = glyphs.getEntry(i).getSong().getGenre();
-                otherGenre = otherGenre.substring(0, 1);
-                if (currentGenre.compareTo(otherGenre) > 0) {
-                    glyphs.swap(counter, i);
+            for (int i = 1; i <= glyphs.getLength(); i++) {
+                char[] otherGen=  glyphs.getEntry(i).getSong().getGenre().toCharArray();
+                int len = Math.min(currGen.length, otherGen.length);
+                int j = 0;
+                boolean match = true;
+                while(match && j < len )
+                {
+                    if (otherGen[j] == currGen[j] )
+                    {
+                        j++;
+                    }
+                    else 
+                    {
+                        if (currGen[j] < otherGen[j] ) {
+                            glyphs.swap(i, counter);
+                    }
+                        match = false;
+                    }
                 }
+                
+                
             }
+
         }
         return glyphs;
     }
 
+    
+    
+    /**
+     * sorts by title
+     */
+    public LinkedList<Glyph> sortByArtist() {
+        Iterator<Glyph> iter = glyphs.iterator();
+        int counter = 0;
+        while (iter.hasNext()) {
+            Glyph current = iter.next();
+            char[] currName = current.getSong().getArtist().toCharArray();
+            counter++;
+
+            for (int i = 1; i <= glyphs.getLength(); i++) {
+                char[] otherName =  glyphs.getEntry(i).getSong().getArtist().toCharArray();
+                int len = Math.min(currName.length, otherName.length);
+                int j = 0;
+                boolean match = true;
+                while(match && j < len )
+                {
+                    if (otherName[j] == currName[j] )
+                    {
+                        j++;
+                    }
+                    else 
+                    {
+                        if (currName[j] < otherName[j] ) {
+                            glyphs.swap(i, counter);
+                    }
+                        match = false;
+                    }
+                }
+                
+                
+            }
+
+        }
+        return glyphs;
+    }
+
+    
+    
+    /**
+     * sorts by title
+     */
+    public LinkedList<Glyph> sortByDate() {
+        Iterator<Glyph> iter = glyphs.iterator();
+        int counter = 0;
+        while (iter.hasNext()) {
+            Glyph current = iter.next();
+            int currYear = current.getSong().getDate();
+            counter++;
+
+            for (int i = 1; i <= glyphs.getLength(); i++) {
+                int otherYear =  glyphs.getEntry(i).getSong().getDate();
+                if (otherYear < currYear)
+                {
+                    glyphs.swap(i, counter);
+                }
+                
+            }
+
+        }
+        return glyphs;
+    }
+
+    
+    
+    
 }

@@ -46,6 +46,8 @@ public class Glyph {
         Iterator<Student> iter = students.iterator();
         while (iter.hasNext()) {
             Student current = iter.next();
+           LinkedList<Song> liked = current.getLikedSongs();
+           
             if (likesSong(current)) {
                 addFan(current);
             }

@@ -43,7 +43,7 @@ public class GUIGlyphWindow {
     private static final int  WIDTH = 1000;
     private static final int  HEIGHT = 800;
     private static final int  BAR_HEIGHT = 10;
-    private static final int  GLYPH_X_INC = 200;
+    private static final int  GLYPH_X_INC = 210;
     private static final int  GLYPH_X_INITIAL = 100;
     private static final int  GLYPH_Y_INITIAL = 50;
     private static final int  GLYPH_Y_INC = 265;
@@ -265,7 +265,7 @@ public class GUIGlyphWindow {
      *              Button to trigger this behavior.
      */
     public void clickedByArtist(Button button) {
-    //    assemblePages(calc.sortByArtist());
+        assemblePages(calc.sortByArtist());
         currPage = 1;
         Iterator<LinkedList<Glyph>> iter = currPages.iterator();
         paintGlyphs(iter.next());
@@ -283,7 +283,7 @@ public class GUIGlyphWindow {
      *              Button to trigger this behavior.
      */
     public void clickedByDate(Button button) {
-    //    assemblePages(calc.sortByDate());
+       assemblePages(calc.sortByDate());
         currPage = 1;
         Iterator<LinkedList<Glyph>> iter = currPages.iterator();
         paintGlyphs(iter.next());
@@ -432,6 +432,7 @@ public class GUIGlyphWindow {
             makeListenerBar(x, y, listeners[i], COLORS[i]);
             makeFanBar(fanX, y, fans[i], COLORS[i]);
             y +=  BAR_HEIGHT;
+         
         }
         y -= GLYPH_HEIGHT_GAP;
         Shape bar = new Shape(fanX - BAR_WIDTH/2, y , BAR_WIDTH/2, 
@@ -460,6 +461,7 @@ public class GUIGlyphWindow {
     private void makeListenerBar(int x, int y, int listeners, Color color)
     {
         double listener = (double) listeners / 100;
+        
         double barLength = listener * GLYPH_WIDTH;
         int length = (int) barLength;
         int barDeficit = GLYPH_WIDTH - length + 5;
@@ -473,7 +475,6 @@ public class GUIGlyphWindow {
         double barLength = fan * GLYPH_WIDTH;
         int length = (int) barLength;
         Shape bar = new Shape(x, y, length, BAR_WIDTH, color);
-        System.out.println(fans);
         window.addShape(bar);
     }
     
