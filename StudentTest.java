@@ -13,7 +13,7 @@ public class StudentTest extends student.TestCase{
      */
     public void setUp()
     {
-        a = new Attributes(MajorEnum.CS, HobbyEnum.READ, RegionEnum.NE_USA);
+        a = new Attributes(MajorEnum.CS, HobbyEnum.READING, RegionEnum.NE_USA);
         r = new String[3];
         r[0] = "Yes";
         r[1] = "No";

@@ -261,6 +261,8 @@ public class LinkedListTest extends TestCase {
         empty.add("test");
         assertEquals(1, empty.getLength());
         assertEquals("test", empty.getEntry(1));
+        fourEntries.add("last");
+        assertEquals("last", fourEntries.getEntry(6));
     }
     // =======================end of method=======================
 

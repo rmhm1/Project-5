@@ -38,10 +38,6 @@ public class GlyphCalculator {
             Glyph current = iter.next();
             LinkedList<Attributes> fans = current.getFans();
             int[] newFans = calculateHobbyBars(fans);
-            for (int i = 0; i < newFans.length; i++)
-            {
-                System.out.println(newFans[i]);
-            }
             current.setFanBars(newFans);
             LinkedList<Attributes> listeners = current.getListeners();
             int[] newListeners = calculateHobbyBars(listeners);
@@ -49,7 +45,8 @@ public class GlyphCalculator {
         }
         return glyphs;
     }
-    
+
+
     /**
      * represents by region
      */
@@ -66,7 +63,8 @@ public class GlyphCalculator {
         }
         return glyphs;
     }
-    
+
+
     /**
      * represents by major.
      */
@@ -83,19 +81,17 @@ public class GlyphCalculator {
         }
         return glyphs;
     }
-    
-    
 
-    
+
     /**
      * builds an int array based on hobby for a list of
      * student attributes.
+     * 
      * @param attributes
-     *              A LinkedList of attributes to build an int array for.
+     *            A LinkedList of attributes to build an int array for.
      */
-    private int[] calculateHobbyBars(LinkedList<Attributes> attributes)
-    {
-        Iterator<Attributes> iter  = attributes.iterator();
+    private int[] calculateHobbyBars(LinkedList<Attributes> attributes) {
+        Iterator<Attributes> iter = attributes.iterator();
         int[] newBars = new int[4];
         while (iter.hasNext()) {
             Attributes current = iter.next();
@@ -117,18 +113,42 @@ public class GlyphCalculator {
                     break;
             }
         }
-            return newBars;
+
+        return convertToPercentage(newBars, SongSurveyReader.hobbies);
     }
-    
+
+
+    /**
+     * Convert an int array from raw numbers to percentages
+     * (percentage of the sum of all entries represented by each entry).
+     * 
+     * @param bars
+     *            The int array to be converted.
+     * @return
+     *         The int array, converted to percentages.
+     */
+    private int[] convertToPercentage(int[] bars, int[] totals) {
+        for (int i = 0; i < totals.length; i++) {
+            int total = totals[i];
+            if (total != 0) {
+                double num = (double)bars[i];
+                double percent = (num / total) * 100;
+                bars[i] = (int)percent;
+            }
+        }
+        return bars;
+    }
+
+
     /**
      * builds an int array based on region for a list of
      * student attributes.
+     * 
      * @param attributes
-     *              A LinkedList of attributes to build an int array for.
+     *            A LinkedList of attributes to build an int array for.
      */
-    private int[] calculateRegionBars(LinkedList<Attributes> attributes)
-    {
-        Iterator<Attributes> iter  = attributes.iterator();
+    private int[] calculateRegionBars(LinkedList<Attributes> attributes) {
+        Iterator<Attributes> iter = attributes.iterator();
         int[] newBars = new int[4];
         while (iter.hasNext()) {
             Attributes current = iter.next();
@@ -150,19 +170,19 @@ public class GlyphCalculator {
                     break;
             }
         }
-            return newBars;
+        return convertToPercentage(newBars, SongSurveyReader.regions);
     }
-    
-    
+
+
     /**
      * builds an int array based on major for a list of
      * student attributes.
+     * 
      * @param attributes
-     *              A LinkedList of attributes to build an int array for.
+     *            A LinkedList of attributes to build an int array for.
      */
-    private int[] calculateMajorBars(LinkedList<Attributes> attributes)
-    {
-        Iterator<Attributes> iter  = attributes.iterator();
+    private int[] calculateMajorBars(LinkedList<Attributes> attributes) {
+        Iterator<Attributes> iter = attributes.iterator();
         int[] newBars = new int[4];
         while (iter.hasNext()) {
             Attributes current = iter.next();
@@ -184,48 +204,54 @@ public class GlyphCalculator {
                     break;
             }
         }
-            return newBars;
+        return convertToPercentage(newBars, SongSurveyReader.majors);
     }
-    
+
 
     /**
      * sorts by title
      */
     public LinkedList<Glyph> sortByTitle() {
-        Iterator <Glyph> iter = glyphs.iterator();
+        Iterator<Glyph> iter = glyphs.iterator();
         int counter = 0;
-        while (iter.hasNext())
-        {
-        Glyph current = iter.next();
-        counter++;
-        
-            for (int i = counter; i <= glyphs.getLength(); i++)
-               if ( current.getSong().getName().compareTo(glyphs.
-                   getEntry(i).getSong() .getName()) < 0 ){
-                glyphs.swap(counter, i);
+        while (iter.hasNext()) {
+            Glyph current = iter.next();
+            counter++;
+
+            for (int i = counter; i <= glyphs.getLength(); i++) {
+                String currentName = current.getSong().getName();
+                currentName = currentName.substring(0, 1);
+                String otherName = glyphs.getEntry(i).getSong().getName();
+                otherName = otherName.substring(0, 1);
+                if (currentName.compareTo(otherName) > 0) {
+                    glyphs.swap(counter, i);
+                }
             }
+
         }
         return glyphs;
     }
-    
 
 
     /**
      * sorts by genre
      */
     public LinkedList<Glyph> sortByGenre() {
-        
-        Iterator <Glyph> iter = glyphs.iterator();
+
+        Iterator<Glyph> iter = glyphs.iterator();
         int counter = 0;
-        while (iter.hasNext())
-        {
-        Glyph current = iter.next();
-        counter++;
-        
-            for (int i = counter; i <= glyphs.getLength(); i++)
-               if ( current.getSong().getGenre().compareTo(glyphs.
-                   getEntry(i).getSong() .getGenre()) < 0 ){
-                glyphs.swap(counter, i);
+        while (iter.hasNext()) {
+            Glyph current = iter.next();
+            counter++;
+
+            for (int i = counter; i <= glyphs.getLength(); i++) {
+                String currentGenre = current.getSong().getGenre();
+                currentGenre = currentGenre.substring(0, 1);
+                String otherGenre = glyphs.getEntry(i).getSong().getGenre();
+                otherGenre = otherGenre.substring(0, 1);
+                if (currentGenre.compareTo(otherGenre) > 0) {
+                    glyphs.swap(counter, i);
+                }
             }
         }
         return glyphs;

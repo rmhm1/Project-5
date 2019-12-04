@@ -24,7 +24,8 @@ public class Input {
         else {
             @SuppressWarnings("unused")
             SongSurveyReader reader = new SongSurveyReader(
-                "MusicSurveyData2018Intro.csv", "SongList2018Intro.csv");
+                "MusicSurveyData2016S-1.csv", "SongList2016S-1.csv");
+            GUIGlyphWindow window = new GUIGlyphWindow(reader.getCalculator());
         }
     }
 }

@@ -10,6 +10,7 @@
 package prj5;
 
 import java.awt.Color;
+import java.util.Iterator;
 import CS2114.Button;
 import CS2114.Shape;
 import CS2114.TextShape;
@@ -25,6 +26,7 @@ import CS2114.WindowSide;
 public class GUIGlyphWindow {
 
  // --------------------------------FIELDS-------------------------------
+    // GlyphCalculator field to be added.
     private Window window;
     private Button byMajor;
     private Button byHobby;
@@ -35,54 +37,46 @@ public class GUIGlyphWindow {
     private Button byGenre;
     private Button prev;
     private Button next;
+    private int legendNum;
+    private GlyphCalculator calc;
+    private LinkedList<LinkedList<Glyph>> currPages;
     private static final int  WIDTH = 1000;
     private static final int  HEIGHT = 700;
-    private static final int  GLYPH_HEIGHT = 10;
+    private static final int  BAR_HEIGHT = 10;
+    private static final int  GLYPH_X_INC = 200;
+    private static final int  GLYPH_X_INITIAL = 100;
+    private static final int  GLYPH_Y_INITIAL = 50;
+    private static final int  GLYPH_Y_INC = 265;
     private static final int  GLYPH_WIDTH = 80;
-    private static final int  GLYPH_WIDTH_GAP = 50;
-    private static final int  GLYPH_HEIGHT_GAP = 100;
+    private static final int  GLYPH_HEIGHT_GAP = 40;
     private static final int  BAR_WIDTH= 5;
     private static final int  GLYPHS_PER_PAGE = 9;
-    private int pageNum;
+    
+    private static final Color[] COLORS =  {Color.pink, Color.orange, 
+        Color.blue, Color.green};
+    private int currPage;
     private int glyphNum;
 
      // -------------------------------METHODS-------------------------------
      // -----------------------------------------------------------
      /**
-      * Create a new Glyph.
-      * @param song
-      *                  The song this glyph is representing.
-      *@param students
-      *                  The list of students.
+      * Create a new GUIGlyphWindow.
+      * 
+      *  **GlyphCalculator param to be added**
       */
-    public GUIGlyphWindow() {
-        pageNum = 1;
-        glyphNum = 1;
+    public GUIGlyphWindow(GlyphCalculator calc) {
+        currPage = 1;
+        legendNum = 1;
         window = new Window();
         window.setSize(WIDTH, HEIGHT);
+        this.calc = calc;
         intializeButtons();
         addButtons();
-        paintLegend();
-       makeGlyph(50, 100);
-       makeGlyph(50, 300);
-       makeGlyph(50, 500);
-       makeGlyph(315, 100);
-       makeGlyph(315, 300);
-       makeGlyph(315, 500);
-       makeGlyph(580, 500);
-       makeGlyph(580, 100);
-       makeGlyph(580, 300);
-       TextShape textShape = new TextShape(75, 40, "Song Name Here");
-       textShape.setBackgroundColor(Color.white);
-       
-       TextShape textShape2 = new TextShape(65, 60, " By Artist Name Here");
-       textShape2.setBackgroundColor(Color.white);
-       window.addShape(textShape);
-       window.addShape(textShape2);
+        currPages = new LinkedList<LinkedList<Glyph>>();
+        assemblePages(calc.sortByTitle());
+        paintLegend(legendNum);
        
     }
-
-                
      // =======================end of method=======================
     
     
@@ -90,45 +84,56 @@ public class GUIGlyphWindow {
      *  This method assembles the legend. It will be cleaned up in the 
      *  future please excuse the mess I'm so sorry :(
      */
-    private void paintLegend()
+    private void paintLegend(int enumInt)
     {
+        String[] enums = new String[5];
+        switch(enumInt) {
+            case 1:
+                enums[0] = "Hobby";
+                enums[1] = "Read";
+                enums[2] = "Art";
+                enums[3] = "Sports";
+                enums[4] = "Music";
+            default:
+                enums[0] = "Hobby";
+                enums[1] = "Read";
+                enums[2] = "Art";
+                enums[3] = "Sports";
+                enums[4] = "Music";
+        }
+        
         Shape legend = new Shape(810, 400, 290, 200, Color.black);
         legend.setBackgroundColor(Color.white);
-        TextShape legend1 = new TextShape(870, 410, "Hobby Legend:");
-        legend1.setBackgroundColor(Color.white);
-        TextShape legend2 = new TextShape(890, 425, "Read");
-        legend2.setBackgroundColor(Color.white);
-        legend2.setForegroundColor(Color.pink);
-        TextShape legend3 = new TextShape(890, 440, "Art");
-        legend3.setBackgroundColor(Color.white);
-        legend3.setForegroundColor(Color.orange);
-        TextShape legend4 = new TextShape(890, 455, "Sports");
-        legend4.setBackgroundColor(Color.white);
-        legend4.setForegroundColor(Color.blue);
-        TextShape legend5 = new TextShape(890, 470, "Music");
-        legend5.setBackgroundColor(Color.white);
-        legend5.setForegroundColor(Color.green);
-        TextShape legend6 = new TextShape(880, 500, "Song Name");
-        legend6.setBackgroundColor(Color.white);
-        legend6.setForegroundColor(Color.black);
-        
-        TextShape legend7 = new TextShape(865, 530, "heard");
-        legend7.setBackgroundColor(Color.white);
-        legend7.setForegroundColor(Color.black);
-        TextShape legend8 = new TextShape(930, 530, "likes");
-        legend8.setBackgroundColor(Color.white);
-        legend8.setForegroundColor(Color.black);
-        Shape legendBar = new Shape (915, 520, 5, 40, Color.black);
-        window.addShape(legend2);
-        window.addShape(legend1);
-        window.addShape(legend3);
-        window.addShape(legend4);
-        window.addShape(legend5);
-        window.addShape(legend6);
-        window.addShape(legend7);
-        window.addShape(legend8);
-        window.addShape(legendBar);
+        int y = 410;
         window.addShape(legend);
+        TextShape legendName = new TextShape(870, y, enums[0] + " Legend:");
+        legendName.setBackgroundColor(Color.white);
+        window.addShape(legendName);
+        for (int i = 1; i < enums.length; i++)
+        {
+            y+= 15;
+            TextShape enumText = new TextShape(870, y, enums[i]);
+            enumText.setBackgroundColor(Color.white);
+            enumText.setForegroundColor(COLORS[i-1]);
+            window.addShape(enumText);
+        }
+       
+        
+        
+        TextShape legendSong = new TextShape(880, 500, "Song Name");
+        legendSong.setBackgroundColor(Color.white);
+        legendSong.setForegroundColor(Color.black);
+        TextShape legendHeard = new TextShape(865, 530, "heard");
+        legendHeard.setBackgroundColor(Color.white);
+        legendHeard.setForegroundColor(Color.black);
+        TextShape legendLikes = new TextShape(930, 530, "likes");
+        legendLikes.setBackgroundColor(Color.white);
+        legendLikes.setForegroundColor(Color.black);
+        Shape legendBar = new Shape (915, 520, 5, 40, Color.black);
+        window.addShape(legendBar);
+        window.addShape(legendSong);
+        window.addShape(legendHeard);
+        window.addShape(legendLikes);
     }
     
     
@@ -184,8 +189,13 @@ public class GUIGlyphWindow {
      * @param button
      *              Button to trigger this behavior.
      */
-    private void clickedByMajor(Button button) {
-        // to do
+    public void clickedByMajor(Button button) {
+        legendNum = 3;
+        assemblePages(calc.byMajor());
+        currPage = 1;
+        Iterator<LinkedList<Glyph>> iter = currPages.iterator();
+        paintGlyphs(iter.next());
+        prev.disable();
     }
     
     
@@ -197,8 +207,14 @@ public class GUIGlyphWindow {
      * @param button
      *              Button to trigger this behavior.
      */
-    private void clickedByRegion(Button button) {
-        // to do
+    public void clickedByRegion(Button button) {
+        legendNum = 2;
+        assemblePages(calc.byRegion());
+        currPage = 1;
+        Iterator<LinkedList<Glyph>> iter = currPages.iterator();
+        paintGlyphs(iter.next());
+        paintLegend(2);
+        prev.disable();
     }
     
  // -----------------------------------------------------------
@@ -209,8 +225,14 @@ public class GUIGlyphWindow {
      * @param button
      *              Button to trigger this behavior.
      */
-    private void clickedByHobby(Button button) {
-        // to do
+    public void clickedByHobby(Button button) {
+        legendNum = 1;
+        assemblePages(calc.byHobby());
+        currPage = 1;
+        Iterator<LinkedList<Glyph>> iter = currPages.iterator();
+        paintGlyphs(iter.next());
+        paintLegend(1);
+        prev.disable();
     }
     
  // -----------------------------------------------------------
@@ -221,8 +243,13 @@ public class GUIGlyphWindow {
      * @param button
      *              Button to trigger this behavior.
      */
-    private void clickedByTitle(Button button) {
-        // to do
+    public void clickedByTitle(Button button) {
+        assemblePages(calc.sortByTitle());
+        currPage = 1;
+        Iterator<LinkedList<Glyph>> iter = currPages.iterator();
+        paintGlyphs(iter.next());
+        paintLegend(1);
+        prev.disable();
     }
     
     
@@ -234,8 +261,13 @@ public class GUIGlyphWindow {
      * @param button
      *              Button to trigger this behavior.
      */
-    private void clickedByArtist(Button button) {
-        // to do
+    public void clickedByArtist(Button button) {
+    //    assemblePages(calc.sortByArtist());
+        currPage = 1;
+        Iterator<LinkedList<Glyph>> iter = currPages.iterator();
+        paintGlyphs(iter.next());
+        paintLegend(1);
+        prev.disable();
     }
     
     
@@ -247,8 +279,13 @@ public class GUIGlyphWindow {
      * @param button
      *              Button to trigger this behavior.
      */
-    private void clickedByDate(Button button) {
-        // to do
+    public void clickedByDate(Button button) {
+    //    assemblePages(calc.sortByDate());
+        currPage = 1;
+        Iterator<LinkedList<Glyph>> iter = currPages.iterator();
+        paintGlyphs(iter.next());
+        paintLegend(1);
+        prev.disable();
     }
     
  // -----------------------------------------------------------
@@ -259,8 +296,13 @@ public class GUIGlyphWindow {
      * @param button
      *              Button to trigger this behavior.
      */
-    private void clickedByGenre(Button button) {
-        // to do
+    public void clickedByGenre(Button button) {
+        assemblePages(calc.sortByGenre());
+        currPage = 1;
+        Iterator<LinkedList<Glyph>> iter = currPages.iterator();
+        paintGlyphs(iter.next());
+        paintLegend(1);
+        prev.disable();
     }
     
  // -----------------------------------------------------------
@@ -271,8 +313,24 @@ public class GUIGlyphWindow {
      * @param button
      *              Button to trigger this behavior.
      */
-    private void clickedNext(Button button) {
-        // to do
+    public void clickedNext(Button button) {
+        prev.enable();
+        currPage++;
+        int counter = currPage;
+        Iterator<LinkedList<Glyph>> iter = currPages.iterator();
+        while (counter > 1 && iter.hasNext())
+        {
+            iter.next();
+            counter--;
+        }
+        if(iter.hasNext())
+        {
+            paintGlyphs(iter.next());
+        }
+        if (!iter.hasNext())
+        {
+            next.disable();
+        }
     }
     
  // -----------------------------------------------------------
@@ -283,8 +341,21 @@ public class GUIGlyphWindow {
      * @param button
      *              Button to trigger this behavior.
      */
-    private void clickedPrev(Button button) {
-        // to do
+    public void clickedPrev(Button button) {
+        next.enable();
+        currPage--;
+        int counter = currPage;
+        Iterator<LinkedList<Glyph>> iter = currPages.iterator();
+        while (counter > 1 && iter.hasNext())
+        {
+            iter.hasNext();
+            counter--;
+        }
+        paintGlyphs(iter.next());
+        if (currPage == 1)
+        {
+            prev.disable();
+        }
     }
     
  // -----------------------------------------------------------
@@ -295,9 +366,40 @@ public class GUIGlyphWindow {
      * @param glyphs
      *          The linked list of glyphs to paint.
      */
-    private void paintGlyphs(LinkedList<Glyph> glyphs)
+    private void paintGlyphs(LinkedList<Glyph> page)
     {
-        // to do
+        window.removeAllShapes();
+        paintLegend(legendNum);
+        Iterator<Glyph> iter = page.iterator();
+        int row = 1;
+        while(iter.hasNext())
+        {
+            int col = 1;
+            while (col < 4 && iter.hasNext())
+            {
+                addGlyph(row, col, iter.next());   
+                col++;
+            }
+            row++;
+        }
+    }
+        
+   
+
+    private void assemblePages(LinkedList<Glyph> glyphs)
+    {
+        LinkedList<LinkedList<Glyph>> pages =  new LinkedList<LinkedList<Glyph>>(); 
+        Iterator<Glyph> iter = glyphs.iterator();
+        while (iter.hasNext())
+        {
+            LinkedList<Glyph> page = new LinkedList<Glyph>();
+            while(iter.hasNext() && page.getLength() <= GLYPHS_PER_PAGE)
+            {
+                page.add(iter.next());
+            }
+            pages.add(page);
+        }
+        currPages = pages;
     }
     
  // -----------------------------------------------------------
@@ -317,7 +419,15 @@ public class GUIGlyphWindow {
      */
     private void assembleGlyphRow(int row, Glyph first, Glyph second, Glyph third )
     {
-        // To-do
+        addGlyph(row, 1, first);
+        if (second != null)
+        {
+            addGlyph(row, 2, second);
+        }
+        if (third != null)
+        {
+            addGlyph(row, 3, third);
+        }
     }
     
  // -----------------------------------------------------------
@@ -333,37 +443,57 @@ public class GUIGlyphWindow {
      */
     private void addGlyph(int row, int col, Glyph glyph)
     {
-        // to-do
-        
-    }
-    
-    // -----------------------------------------------------------
-    /**
-     * This is a temporary method to display a dummy
-     * glyph for screenshot purposes.
-     *                  
-     */
-    private void makeGlyph(int x, int y) {
-        
-        int fanX = x + GLYPH_WIDTH + BAR_WIDTH;
-        Shape pink = new Shape(x + 40, y, 40, 10, Color.pink);
-        Shape pink2 = new Shape(fanX, y, 60, 10, Color.pink);
-        Shape orange = new Shape(x , y + GLYPH_HEIGHT, 80, 10);
-        Shape orange2 = new Shape(fanX , y + GLYPH_HEIGHT, 50, 10);
-        Shape blue = new Shape(x + 10, y + (GLYPH_HEIGHT  * 2), 70, 10, Color.blue);
-        Shape blue2 = new Shape(fanX, y + (GLYPH_HEIGHT  * 2), 10, 10, Color.blue);
-        Shape green = new Shape(x + 50, y + (GLYPH_HEIGHT  * 3), 30, 10, Color.green);
-        Shape green2 = new Shape(fanX, y + (GLYPH_HEIGHT  * 3), 50, 10, Color.green);
-        Shape bar = new Shape(fanX - BAR_WIDTH, y , BAR_WIDTH, 40, Color.black);
-        window.addShape(pink);
-        window.addShape(pink2);
-        window.addShape(orange);
-        window.addShape(orange2);
-        window.addShape(blue);
-        window.addShape(blue2);
-        window.addShape(green);
-        window.addShape(green2);
+        int x = GLYPH_X_INITIAL + ( (col - 1) * GLYPH_X_INC);
+        int fanX= x + GLYPH_WIDTH + BAR_WIDTH;
+        int y = GLYPH_Y_INITIAL + ( (row - 1) * GLYPH_Y_INC);
+        addGlyphText(glyph, fanX, y);
+        int[] fans = glyph.getFanBars();
+        int[] listeners = glyph.getListenerBars();
+        for (int i =0; i < fans.length ; i++)
+        {
+            makeListenerBar(x, y, listeners[i], COLORS[i]);
+            makeFanBar(fanX, y, fans[i], COLORS[i]);
+            y = y + BAR_HEIGHT;
+        }
+        Shape bar = new Shape(fanX - BAR_WIDTH, y , BAR_WIDTH, 
+            BAR_HEIGHT * 4, Color.black);
         window.addShape(bar);
     }
+    
+    
+    private void addGlyphText(Glyph glyph, int x, int y)
+    {
+        String name = glyph.getSong().getName();
+        String artist = "By " + glyph.getSong().getArtist();
+        int xCoord = x  - (name.length() / 2);
+        int yCoord = y -  GLYPH_HEIGHT_GAP;
+        
+        TextShape songName = new TextShape(xCoord, yCoord, name);
+        songName.setBackgroundColor(Color.white);
+        window.addShape(songName);
+        xCoord = x  - (artist.length() / 2);
+        yCoord += 20;
+        TextShape artistName = new TextShape(xCoord, yCoord, artist);
+        artistName.setBackgroundColor(Color.white);
+        window.addShape(artistName);
+    }
+    
+    private void makeListenerBar(int x, int y, int listeners, Color color)
+    {
+        double listener = (double) listeners / 100;
+        int barLength = (int) listener * GLYPH_WIDTH;
+        int barDeficit = GLYPH_WIDTH - barLength;
+        Shape bar = new Shape(x + barDeficit, y, barLength, BAR_HEIGHT, color);
+        window.addShape(bar);
+    }
+    
+    private void makeFanBar(int x, int y, int fans, Color color)
+    {
+        double fan = (double) fans / 100;
+        int barLength = (int) fan * GLYPH_WIDTH;
+        Shape bar = new Shape(x, y, barLength, BAR_HEIGHT, color);
+        window.addShape(bar);
+    }
+    
     
 }

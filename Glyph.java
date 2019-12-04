@@ -41,6 +41,8 @@ public class Glyph {
         this.song = song;
         fanBars = new int[4];
         listenerBars = new int[4];
+        fanAttributes = new LinkedList<Attributes>();
+        listenerAttributes = new LinkedList<Attributes>();
         Iterator<Student> iter = students.iterator();
         while (iter.hasNext()) {
             Student current = iter.next();
@@ -100,6 +102,7 @@ public class Glyph {
      */
     private boolean heardSong(Student listener) {
         if (listener.getHeardSongs().contains(song)) {
+            
             return true;
         }
         return false;
@@ -146,8 +149,11 @@ public class Glyph {
      *            listener to add.
      */
     private void addFan(Student fan) {
+        if (fan != null && fan.getAttributes()!= null)
+        {
         Attributes studentAttributes = fan.getAttributes();
         fanAttributes.add(studentAttributes);
+        }
     }
 
     // =======================end of method=======================

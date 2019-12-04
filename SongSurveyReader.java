@@ -13,7 +13,9 @@ import java.util.Scanner;
  * @version 2019.11.18
  */
 public class SongSurveyReader {
-
+    public static int[] hobbies;
+    public static int[] regions;
+    public static int[] majors;
     private LinkedList<Student> students;
     private LinkedList<Song> songs;
     private GlyphCalculator calculator;
@@ -30,11 +32,13 @@ public class SongSurveyReader {
      */
     public SongSurveyReader(String file1, String file2)
         throws FileNotFoundException {
+        hobbies = new int[4];
+        regions = new int[4];
+        majors = new int[4];
         songs = readSongFile(file2);
         students = readStudentFile(file1);
-        //System.out.println(students.getEntry(1).getHeardSongs().getLength());
         calculator = new GlyphCalculator(students, songs);
-        this.intermediateSubmission();
+        
     }
 
 
@@ -42,41 +46,46 @@ public class SongSurveyReader {
      * Prints what is needed for Intermediate Submission
      */
     public void intermediateSubmission() {
-        LinkedList<Glyph> glyphs = calculator.byHobby();
-        glyphs = calculator.sortByGenre();
-        
+        LinkedList<Glyph>glyphs = calculator.sortByGenre();
+         glyphs = calculator.byHobby();
+         
         Iterator<Glyph> glyphIter = glyphs.iterator();
         while (glyphIter.hasNext()) {
-             Glyph current = glyphIter.next();
-             Song song = current.getSong();
+            Glyph current = glyphIter.next();
+            Song song = current.getSong();
             int[] fan = current.getFanBars();
             int[] listener = current.getListenerBars();
-            System.out.println("song title " + song.getName());
-            System.out.println("song genre " + song.getGenre());
-            System.out.println("song year " + song.getDate());
-            System.out.println("heard");
-            System.out.println("reading" + listener[0] + " art" + listener[1]
-                + " sports" + listener[2] + " music" + listener[3]);
+            System.out.println("Song Title: " + song.getName());
+            System.out.println("Song Genre: " + song.getGenre());
+            System.out.println("Song Year: " + song.getDate());
+            System.out.println("Heard");
+            System.out.println("reading:" + listener[0] + " art:" + listener[1]
+                + " sports:" + listener[2] + " music:" + listener[3]);
             System.out.println("likes");
-            System.out.println("reading" + fan[0] + " art" + fan[1]
-                + " sports" + fan[2] + " music" + fan[3]);
+            System.out.println("reading:" + fan[0] + " art:" + fan[1]
+                + " sports:" + fan[2] + " music:" + fan[3]);
+            System.out.println("");
         }
+        
+        System.out.println("");
         glyphs = calculator.sortByTitle();
+
         glyphIter = glyphs.iterator();
         while (glyphIter.hasNext()) {
             Glyph current = glyphIter.next();
             Song song = current.getSong();
             int[] fan = current.getFanBars();
             int[] listener = current.getListenerBars();
-            System.out.println("song title " + song.getName());
-            System.out.println("song genre " + song.getGenre());
-            System.out.println("song year " + song.getDate());
-            System.out.println("heard");
-            System.out.println("reading" + listener[0] + " art" + listener[1]
-                + " sports" + listener[2] + " music" + listener[3]);
+            System.out.println("Song Title: " + song.getName());
+            System.out.println("Song Genre: " + song.getGenre());
+            System.out.println("Song Year: " + song.getDate());
+            System.out.println("Heard");
+            System.out.println("reading:" + listener[0] + " art:" + listener[1]
+                + " sports:" + listener[2] + " music:" + listener[3]);
             System.out.println("likes");
-            System.out.println("reading" + fan[0] + " art" + fan[1]
-                + " sports" + fan[2] + " music" + fan[3]);
+            System.out.println("reading:" + fan[0] + " art:" + fan[1]
+                + " sports:" + fan[2] + " music:" + fan[3]);
+            System.out.println("");
         }
     }
 
@@ -129,7 +138,7 @@ public class SongSurveyReader {
         while (file.hasNextLine()) {
             String line = file.nextLine();
             data = line.split(", *");
-            
+
             if (!data[0].equalsIgnoreCase("")) {
                 id = Integer.valueOf(data[0]);
             }
@@ -138,25 +147,48 @@ public class SongSurveyReader {
                 major = getMajorEnum(data[2]);
                 region = getRegionEnum(data[3]);
                 hobby = getHobbyEnum(data[4]);
+                if (hobby != null)
+                {
+                    switch(hobby) {
+                        case READING:
+                            hobbies[0] = hobbies[0] + 1;
+                        case ART:
+                            hobbies[1] = hobbies[1] + 1;
+                        case SPORTS:
+                            hobbies[2] = hobbies[2] + 1;
+                        case MUSIC: 
+                            hobbies[3] = hobbies[3] + 1;
+                        default:
+                            break;
+                    }
+                }
                 
                 responses = Arrays.copyOfRange(data, 5, data.length);
                 if (!(major == null || hobby == null || region == null)) {
                     student = new Student(id, data[1], new Attributes(major,
                         hobby, region), responses);
                     students.add(student);
-
+                    
                     Iterator<Song> songIter = songs.iterator();
+                    
                     while (songIter.hasNext()) {
+                        Song current = songIter.next();
                         for (int i = 0; i < responses.length; i = i + 2) {
-                            Song current = songIter.next();
+                            
+                         
                             if (responses[i].compareToIgnoreCase("yes") == 0) {
                                 current.incrementListens();
                                 student.getHeardSongs().add(current);
+
                             }
+                            if (i + 1 < responses.length)
+                            {
                             if (responses[i + 1].compareToIgnoreCase(
                                 "yes") == 0) {
                                 current.incrementLikes();
                                 student.getLikedSongs().add(current);
+                            }
+
                             }
                         }
                     }
@@ -182,14 +214,18 @@ public class SongSurveyReader {
         input = input.toLowerCase();
         switch (input) {
             case ("computerscience"):
+                majors[0] = majors[0] + 1;
                 return MajorEnum.CS;
             // break;
             case ("otherengineering"):
+                majors[1] = majors[1] + 1;
                 return MajorEnum.ENG_OTHER;
             // break;
             case ("mathorcmda"):
+                majors[2] = majors[2] + 1;
                 return MajorEnum.CMDA_MATH;
             case ("other"):
+                majors[3] = majors[3] + 1;
                 return MajorEnum.OTHER;
             default:
                 return null;
@@ -207,17 +243,21 @@ public class SongSurveyReader {
     private RegionEnum getRegionEnum(String input) {
         input = input.replaceAll(" ", "");
         input = input.toLowerCase();
-        
+
         switch (input) {
             case ("northeast"):
+                regions[0] = regions[0] + 1;
                 return RegionEnum.NE_USA;
             // break;
             case ("southeast"):
+                regions[1] = regions[1] + 1;
                 return RegionEnum.SE_USA;
             // break;
             case ("unitedstates(otherthansoutheastornorthwest)"):
+                regions[2] = regions[2] + 1;
                 return RegionEnum.OTHER_USA;
             case ("outsideofunitedstates"):
+                regions[3] = regions[3] + 1;
                 return RegionEnum.OUTSIDE_USA;
             default:
                 return null;
@@ -241,5 +281,16 @@ public class SongSurveyReader {
         else {
             return null;
         }
+    }
+    
+    
+    
+    /**
+     * Returns the glyphCalculator object
+     * 
+     * @return the GlyphCalculator
+     */
+    public GlyphCalculator getCalculator() {
+        return calculator;
     }
 }

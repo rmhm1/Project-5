@@ -1,8 +1,8 @@
 // Virginia Tech Honor Code Pledge:
 //
 // As a Hokie, I will conduct myself with honor and integrity at all
-//times. I will not lie, cheat, or steal, nor will I accept the 
-//actions of those who do.
+// times. I will not lie, cheat, or steal, nor will I accept the
+// actions of those who do.
 // -- Emily Swanson (emiswan)
 
 package prj5;
@@ -123,6 +123,23 @@ public class LinkedList<T> {
      */
     public int getLength() {
         return length;
+    }
+    // =======================end of method=======================
+
+
+    // -----------------------------------------------------------
+    /**
+     * Swap the location of two entries.
+     * 
+     * @param firstIndex
+     *            Index of first entry.
+     * @param secondIndex
+     *            Index of second entry.
+     */
+    public void swap(int firstIndex, int secondIndex) {
+        T secondData = replace(secondIndex, getNodeByIndex(firstIndex)
+            .getData());
+        replace(firstIndex, secondData);
     }
     // =======================end of method=======================
 
@@ -255,8 +272,8 @@ public class LinkedList<T> {
                 head = newNode;
             }
             else {
-                Node last = getNodeByIndex(length);
-                last.setNext(newNode);
+                Node lastNode = getNodeByIndex(length);
+                lastNode.setNext(newNode);
             }
             length++;
         }
@@ -370,40 +387,35 @@ public class LinkedList<T> {
     }
     // =======================end of method=======================
 
- // -----------------------------------------------------------
+
+    // -----------------------------------------------------------
     /**
      * Iterator method creates Iterator object
      *
-     *@param other
-     *              Object to be compared
-     *@return
-     *              True, if the objects are equal.
+     * @param other
+     *            Object to be compared
+     * @return
+     *         True, if the objects are equal.
      */
     @SuppressWarnings("unchecked")
     public boolean equals(Object other) {
-        if (other == null)
-        {
+        if (other == null) {
             return false;
         }
-        if (other == this)
-        {
+        if (other == this) {
             return true;
         }
-        if (other.getClass() != getClass())
-        {
+        if (other.getClass() != getClass()) {
             return false;
         }
-        LinkedList<T> otherList = (LinkedList<T>) other; 
-        if (otherList.getLength() != getLength())
-        {
+        LinkedList<T> otherList = (LinkedList<T>)other;
+        if (otherList.getLength() != getLength()) {
             return false;
         }
         Object[] otherArray = otherList.toArray();
         Object[] thisArray = toArray();
-        for (int i = 0; i < length; i++)
-        {
-            if (!thisArray[i].equals(otherArray[i]))
-            {
+        for (int i = 0; i < length; i++) {
+            if (!thisArray[i].equals(otherArray[i])) {
                 return false;
             }
         }
@@ -411,8 +423,6 @@ public class LinkedList<T> {
     }
     // =======================end of method=======================
 
-    
-    
 
     // -----------------------------------------------------------
     /**
@@ -456,7 +466,7 @@ public class LinkedList<T> {
          */
         @Override
         public boolean hasNext() {
-            return (!isEmpty() && current.getNext() != null);
+            return (current.getNext() != null);
         }
         // =======================end of method=======================
 
@@ -471,9 +481,7 @@ public class LinkedList<T> {
          */
         @Override
         public T next() {
-            if (!hasNext()) {
-                throw new NoSuchElementException();
-            }
+            if (hasNext()) {
             if (position == 0) {
                 current = head;
             }
@@ -483,6 +491,11 @@ public class LinkedList<T> {
             position++;
             nextCalled = true;
             return current.getData();
+            }
+            else
+            {
+                throw new NoSuchElementException();
+            }
         }
         // =======================end of method=======================
 
