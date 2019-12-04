@@ -256,5 +256,49 @@ public class GlyphCalculator {
         }
         return glyphs;
     }
+    /**
+     * sorts by artist
+     */
+    public LinkedList<Glyph> sortByArtist() {
+
+        Iterator<Glyph> iter = glyphs.iterator();
+        int counter = 0;
+        while (iter.hasNext()) {
+            Glyph current = iter.next();
+            counter++;
+
+            for (int i = counter; i <= glyphs.getLength(); i++) {
+                String currentArtist = current.getSong().getArtist();
+                currentArtist = currentArtist.substring(0, 1);
+                String otherArtist = glyphs.getEntry(i).getSong().getArtist();
+                otherArtist = otherArtist.substring(0, 1);
+                if (currentArtist.compareTo(otherArtist) > 0) {
+                    glyphs.swap(counter, i);
+                }
+            }
+        }
+        return glyphs;
+    }
+    /**
+     * sorts by date
+     */
+    public LinkedList<Glyph> sortByDate() {
+
+        Iterator<Glyph> iter = glyphs.iterator();
+        int counter = 0;
+        while (iter.hasNext()) {
+            Glyph current = iter.next();
+            counter++;
+
+            for (int i = counter; i <= glyphs.getLength(); i++) {
+                int currentDate = current.getSong().getDate();
+                int otherDate = glyphs.getEntry(i).getSong().getDate();
+                if (currentDate > otherDate) {
+                    glyphs.swap(counter, i);
+                }
+            }
+        }
+        return glyphs;
+    }
 
 }
