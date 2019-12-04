@@ -41,7 +41,7 @@ public class GUIGlyphWindow {
     private GlyphCalculator calc;
     private LinkedList<LinkedList<Glyph>> currPages;
     private static final int  WIDTH = 1000;
-    private static final int  HEIGHT = 700;
+    private static final int  HEIGHT = 800;
     private static final int  BAR_HEIGHT = 10;
     private static final int  GLYPH_X_INC = 200;
     private static final int  GLYPH_X_INITIAL = 100;
@@ -49,7 +49,7 @@ public class GUIGlyphWindow {
     private static final int  GLYPH_Y_INC = 265;
     private static final int  GLYPH_WIDTH = 80;
     private static final int  GLYPH_HEIGHT_GAP = 40;
-    private static final int  BAR_WIDTH= 5;
+    private static final int  BAR_WIDTH= 10;
     private static final int  GLYPHS_PER_PAGE = 9;
     
     private static final Color[] COLORS =  {Color.pink, Color.orange, 
@@ -73,8 +73,10 @@ public class GUIGlyphWindow {
         intializeButtons();
         addButtons();
         currPages = new LinkedList<LinkedList<Glyph>>();
-        assemblePages(calc.sortByTitle());
+        LinkedList<Glyph> g = calc.byHobby();
+        assemblePages(g);
         paintLegend(legendNum);
+        paintGlyphs(currPages.getEntry(1));
        
     }
      // =======================end of method=======================
@@ -105,7 +107,7 @@ public class GUIGlyphWindow {
         Shape legend = new Shape(810, 400, 290, 200, Color.black);
         legend.setBackgroundColor(Color.white);
         int y = 410;
-        window.addShape(legend);
+        
         TextShape legendName = new TextShape(870, y, enums[0] + " Legend:");
         legendName.setBackgroundColor(Color.white);
         window.addShape(legendName);
@@ -134,6 +136,7 @@ public class GUIGlyphWindow {
         window.addShape(legendSong);
         window.addShape(legendHeard);
         window.addShape(legendLikes);
+        window.addShape(legend);
     }
     
     
@@ -150,7 +153,7 @@ public class GUIGlyphWindow {
         byRegion = new Button("Represent by Region");
         byRegion.onClick(this, "clickedByRegion");
         byTitle = new Button("Sort by Title");
-        byTitle .onClick(this, "clickedByTitle ");
+        byTitle .onClick(this, "clickedByTitle");
         byArtist = new Button("Sort by Artist Name");
         byArtist.onClick(this, "clickedByArtist");
         byDate = new Button("Sort by Release Year");
@@ -402,33 +405,7 @@ public class GUIGlyphWindow {
         currPages = pages;
     }
     
- // -----------------------------------------------------------
-    /**
-     * TO-DO: this method will add three glyphs in
-     * their respective places in each row by calling
-     * addGlyph.
-     * 
-     * @param row
-     *                  The row number (1, 2, or 3)
-     * @param first
-     *                  The first (left-most) glyph to be put in the row.
-     * @param second
-     *                  The second (middle) glyph to be put in the row.                 
-     * @param third
-     *                  The third (right-most) glyph to be put in the row.                 
-     */
-    private void assembleGlyphRow(int row, Glyph first, Glyph second, Glyph third )
-    {
-        addGlyph(row, 1, first);
-        if (second != null)
-        {
-            addGlyph(row, 2, second);
-        }
-        if (third != null)
-        {
-            addGlyph(row, 3, third);
-        }
-    }
+ 
     
  // -----------------------------------------------------------
     /**
@@ -449,13 +426,15 @@ public class GUIGlyphWindow {
         addGlyphText(glyph, fanX, y);
         int[] fans = glyph.getFanBars();
         int[] listeners = glyph.getListenerBars();
+        y += GLYPH_HEIGHT_GAP;
         for (int i =0; i < fans.length ; i++)
         {
             makeListenerBar(x, y, listeners[i], COLORS[i]);
             makeFanBar(fanX, y, fans[i], COLORS[i]);
-            y = y + BAR_HEIGHT;
+            y +=  BAR_HEIGHT;
         }
-        Shape bar = new Shape(fanX - BAR_WIDTH, y , BAR_WIDTH, 
+        y -= GLYPH_HEIGHT_GAP;
+        Shape bar = new Shape(fanX - BAR_WIDTH/2, y , BAR_WIDTH/2, 
             BAR_HEIGHT * 4, Color.black);
         window.addShape(bar);
     }
@@ -465,13 +444,13 @@ public class GUIGlyphWindow {
     {
         String name = glyph.getSong().getName();
         String artist = "By " + glyph.getSong().getArtist();
-        int xCoord = x  - (name.length() / 2);
+        int xCoord = x  - (2 * name.length())  ;
         int yCoord = y -  GLYPH_HEIGHT_GAP;
         
         TextShape songName = new TextShape(xCoord, yCoord, name);
         songName.setBackgroundColor(Color.white);
         window.addShape(songName);
-        xCoord = x  - (artist.length() / 2);
+        xCoord = x  - ( 2 * artist.length() );
         yCoord += 20;
         TextShape artistName = new TextShape(xCoord, yCoord, artist);
         artistName.setBackgroundColor(Color.white);
@@ -481,17 +460,20 @@ public class GUIGlyphWindow {
     private void makeListenerBar(int x, int y, int listeners, Color color)
     {
         double listener = (double) listeners / 100;
-        int barLength = (int) listener * GLYPH_WIDTH;
-        int barDeficit = GLYPH_WIDTH - barLength;
-        Shape bar = new Shape(x + barDeficit, y, barLength, BAR_HEIGHT, color);
+        double barLength = listener * GLYPH_WIDTH;
+        int length = (int) barLength;
+        int barDeficit = GLYPH_WIDTH - length + 5;
+        Shape bar = new Shape(x + barDeficit, y, length, BAR_HEIGHT, color);
         window.addShape(bar);
     }
     
     private void makeFanBar(int x, int y, int fans, Color color)
     {
         double fan = (double) fans / 100;
-        int barLength = (int) fan * GLYPH_WIDTH;
-        Shape bar = new Shape(x, y, barLength, BAR_HEIGHT, color);
+        double barLength = fan * GLYPH_WIDTH;
+        int length = (int) barLength;
+        Shape bar = new Shape(x, y, length, BAR_WIDTH, color);
+        System.out.println(fans);
         window.addShape(bar);
     }
     

@@ -466,8 +466,17 @@ public class LinkedList<T> {
          */
         @Override
         public boolean hasNext() {
-            return (current.getNext() != null);
+            if (isEmpty())
+            {
+                return false;
+            }
+            if (position == length)
+            {
+                return false;
+            }
+            return true;
         }
+                
         // =======================end of method=======================
 
 

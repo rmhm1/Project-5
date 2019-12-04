@@ -164,22 +164,19 @@ public class SongSurveyReader {
                 }
                 
                 responses = Arrays.copyOfRange(data, 5, data.length);
+                
                 if (!(major == null || hobby == null || region == null)) {
                     student = new Student(id, data[1], new Attributes(major,
                         hobby, region), responses);
                     students.add(student);
                     
                     Iterator<Song> songIter = songs.iterator();
-                    
-                    while (songIter.hasNext()) {
-                        Song current = songIter.next();
-                        for (int i = 0; i < responses.length; i = i + 2) {
-                            
-                         
+                   int i = 0;
+                    while (songIter.hasNext() && i < responses.length) {
+                            Song current = songIter.next();
                             if (responses[i].compareToIgnoreCase("yes") == 0) {
                                 current.incrementListens();
                                 student.getHeardSongs().add(current);
-
                             }
                             if (i + 1 < responses.length)
                             {
@@ -187,11 +184,11 @@ public class SongSurveyReader {
                                 "yes") == 0) {
                                 current.incrementLikes();
                                 student.getLikedSongs().add(current);
+                               
                             }
-
+                            i +=  2;
                             }
                         }
-                    }
 
                 }
             }
@@ -274,25 +271,12 @@ public class SongSurveyReader {
      */
     private HobbyEnum getHobbyEnum(String input) {
         input = input.replaceAll(" ", "");
-        input = input.toLowerCase();
-
-        switch (input) {
-            case ("reading"):
-                hobbies[0] = hobbies[0] + 1;
-                return HobbyEnum.READ;
-            // break;
-            case ("art"):
-                hobbies[1] = hobbies[1] + 1;
-                return HobbyEnum.ART;
-            // break;
-            case ("sports"):
-                hobbies[2] = hobbies[2] + 1;
-                return HobbyEnum.SPORTS;
-            case ("music"):
-                hobbies[3] = hobbies[3] + 1;
-                return HobbyEnum.MUSIC;
-            default:
-                return null;
+        input = input.toUpperCase();
+        if (!input.equals("")) {
+            return HobbyEnum.valueOf(input.toUpperCase());
+        }
+        else {
+            return null;
         }
     }
     

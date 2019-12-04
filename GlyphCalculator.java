@@ -26,6 +26,7 @@ public class GlyphCalculator {
             Glyph currentGlyph = new Glyph(currentSong, students);
             glyphs.add(currentGlyph);
         }
+        glyphs = byHobby();
     }
 
 
@@ -91,11 +92,17 @@ public class GlyphCalculator {
      *            A LinkedList of attributes to build an int array for.
      */
     private int[] calculateHobbyBars(LinkedList<Attributes> attributes) {
-        Iterator<Attributes> iter = attributes.iterator();
+        
+      
         int[] newBars = new int[4];
+        if (attributes != null)
+        {
+        Iterator<Attributes> iter = attributes.iterator();
         while (iter.hasNext()) {
             Attributes current = iter.next();
+            if (current != null) {
             HobbyEnum hobby = current.getHobby();
+            if (hobby != null) {
             switch (hobby) {
                 case READING:
                     newBars[0] = newBars[0] + 1;
@@ -112,9 +119,13 @@ public class GlyphCalculator {
                 default:
                     break;
             }
+            }
         }
-
-        return convertToPercentage(newBars, SongSurveyReader.hobbies);
+        }
+        }
+      
+      newBars = convertToPercentage(newBars, SongSurveyReader.hobbies);
+        return newBars;
     }
 
 
@@ -170,7 +181,7 @@ public class GlyphCalculator {
                     break;
             }
         }
-        return convertToPercentage(newBars, SongSurveyReader.regions);
+      return newBars;
     }
 
 
@@ -204,6 +215,7 @@ public class GlyphCalculator {
                     break;
             }
         }
+        
         return convertToPercentage(newBars, SongSurveyReader.majors);
     }
 
@@ -250,50 +262,6 @@ public class GlyphCalculator {
                 String otherGenre = glyphs.getEntry(i).getSong().getGenre();
                 otherGenre = otherGenre.substring(0, 1);
                 if (currentGenre.compareTo(otherGenre) > 0) {
-                    glyphs.swap(counter, i);
-                }
-            }
-        }
-        return glyphs;
-    }
-    /**
-     * sorts by artist
-     */
-    public LinkedList<Glyph> sortByArtist() {
-
-        Iterator<Glyph> iter = glyphs.iterator();
-        int counter = 0;
-        while (iter.hasNext()) {
-            Glyph current = iter.next();
-            counter++;
-
-            for (int i = counter; i <= glyphs.getLength(); i++) {
-                String currentArtist = current.getSong().getArtist();
-                currentArtist = currentArtist.substring(0, 1);
-                String otherArtist = glyphs.getEntry(i).getSong().getArtist();
-                otherArtist = otherArtist.substring(0, 1);
-                if (currentArtist.compareTo(otherArtist) > 0) {
-                    glyphs.swap(counter, i);
-                }
-            }
-        }
-        return glyphs;
-    }
-    /**
-     * sorts by date
-     */
-    public LinkedList<Glyph> sortByDate() {
-
-        Iterator<Glyph> iter = glyphs.iterator();
-        int counter = 0;
-        while (iter.hasNext()) {
-            Glyph current = iter.next();
-            counter++;
-
-            for (int i = counter; i <= glyphs.getLength(); i++) {
-                int currentDate = current.getSong().getDate();
-                int otherDate = glyphs.getEntry(i).getSong().getDate();
-                if (currentDate > otherDate) {
                     glyphs.swap(counter, i);
                 }
             }
