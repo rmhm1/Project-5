@@ -274,12 +274,25 @@ public class SongSurveyReader {
      */
     private HobbyEnum getHobbyEnum(String input) {
         input = input.replaceAll(" ", "");
-        input = input.toUpperCase();
-        if (!input.equals("")) {
-            return HobbyEnum.valueOf(input.toUpperCase());
-        }
-        else {
-            return null;
+        input = input.toLowerCase();
+
+        switch (input) {
+            case ("reading"):
+                hobbies[0] = hobbies[0] + 1;
+                return HobbyEnum.READ;
+            // break;
+            case ("art"):
+                hobbies[1] = hobbies[1] + 1;
+                return HobbyEnum.ART;
+            // break;
+            case ("sports"):
+                hobbies[2] = hobbies[2] + 1;
+                return HobbyEnum.SPORTS;
+            case ("music"):
+                hobbies[3] = hobbies[3] + 1;
+                return HobbyEnum.MUSIC;
+            default:
+                return null;
         }
     }
     
