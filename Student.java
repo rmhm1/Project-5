@@ -18,8 +18,14 @@ public class Student {
     /**
      * constructor that creates a student
      * also added responses as a parameter
-     * @param i id of student
-     * @param a attributes of student
+     * @param i 
+     *              id of student
+     * @param d 
+     *      date of the informations
+     * @param a 
+     *           attributes of student
+     *@param r
+     *        string array of responses
      */
     public Student(int i, String d, Attributes a, String[] r)
     {

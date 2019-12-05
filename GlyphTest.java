@@ -1,14 +1,16 @@
 package prj5;
 
+import student.TestCase;
 import java.io.FileNotFoundException;
 
 /**
+ * Tests for glyph
  * 
- * @author eliswan
- *
+ * @author emiswan
+ * @version 2019.12.04
  */
-public class GlyphTest extends student.TestCase {
-    private SongSurveyReader reader;
+public class GlyphTest extends TestCase {
+    
     private Glyph glyph;
     private Song song;
     private LinkedList<Student> students;
@@ -21,8 +23,8 @@ public class GlyphTest extends student.TestCase {
      */
     public void setUp() throws FileNotFoundException {
         song = new Song("My Heart Will Go On", "Celine Dion", 1997, "pop");
-        reader = new SongSurveyReader("MusicSurveyData2018Intro.csv",
-            "SongList2018Intro.csv");
+        SongSurveyReader reader = new SongSurveyReader(
+            "MusicSurveyData2018Intro.csv", "SongList2018Intro.csv");
         students = reader.readStudentFile("MusicSurveyData2018Intro.csv");
         glyph = new Glyph(song, students);
     }
@@ -86,7 +88,8 @@ public class GlyphTest extends student.TestCase {
      * @throws FileNotFoundException
      */
     public void testEquals() throws FileNotFoundException {
-        assertFalse(glyph.equals(null));
+        Object o = null;
+        assertFalse(glyph.equals(o));
         assertTrue(glyph.equals(glyph));
         assertFalse(glyph.equals("glyph"));
         Song newSong = new Song("Holy Grail", "Jay-Z", 2013, "pop");

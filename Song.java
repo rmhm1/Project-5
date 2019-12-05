@@ -16,12 +16,14 @@ public class Song {
     /**
      * constructor that creates new song
      * 
-     * @param n
+     * @param title
      *            name of song
      * @param a
      *            artist of song
      * @param d
      *            date of song release
+     * @param genre
+     *            genre of the song
      */
     public Song(String title, String a, int d, String genre) {
         name = title;
@@ -149,7 +151,7 @@ public class Song {
     /**
      * checks to see if this song is equal to another song
      * 
-     * @param other
+     * @param obj
      *            object
      * @return true if equals
      */

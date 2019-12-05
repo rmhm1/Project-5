@@ -24,7 +24,7 @@ public class Input {
         else {
             @SuppressWarnings("unused")
             SongSurveyReader reader = new SongSurveyReader(
-                "MusicSurveyData2016S-1.csv", "SongList2016S-1.csv");
+                "MusicSurveyData2019F.csv", "SongList2019F.csv");
           
             GUIGlyphWindow window = new GUIGlyphWindow(reader.getCalculator());
         }

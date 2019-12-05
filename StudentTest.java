@@ -4,7 +4,7 @@ package prj5;
  * @author Saakshi Naveen
  * @version 11.18.2019
  */
-public class StudentTest extends student.TestCase{
+public class StudentTest extends student.TestCase {
     private Student stu;
     private Attributes a;
     private String[] r;

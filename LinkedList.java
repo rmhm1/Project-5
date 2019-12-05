@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
  * getLength() returns the number of entries.
  * 
  * @author Emily Swanson (emiswan)
- *
+ *@version 2019.12.04
  * @param <T>
  *            The type of data this linked list will hold.
  */
@@ -97,7 +97,8 @@ public class LinkedList<T> {
         }
         // =======================end of method=======================
 
-    }// =======================end of class=======================
+    }
+    // =======================end of class=======================
 
     // -----------------------------FIELDS----------------------------
     private Node head;
@@ -118,7 +119,7 @@ public class LinkedList<T> {
     // -----------------------------------------------------------
     /**
      * Get the size of the list.
-     * @ return
+     * @return
      * The number of entries as an int.
      */
     public int getLength() {
@@ -237,7 +238,7 @@ public class LinkedList<T> {
      * @param index
      *            The index.
      * 
-     * @param enEntry
+     * @param anEntry
      *            The entry to replace the old entry.
      * 
      * @return
@@ -470,11 +471,8 @@ public class LinkedList<T> {
             {
                 return false;
             }
-            if (position == length)
-            {
-                return false;
-            }
-            return true;
+            
+            return (position != length);
         }
                 
         // =======================end of method=======================
@@ -491,18 +489,17 @@ public class LinkedList<T> {
         @Override
         public T next() {
             if (hasNext()) {
-            if (position == 0) {
-                current = head;
+                if (position == 0) {
+                    current = head;
+                }
+                else {
+                    current = current.getNext();
+                }
+                position++;
+                nextCalled = true;
+                return current.getData();
             }
             else {
-                current = current.getNext();
-            }
-            position++;
-            nextCalled = true;
-            return current.getData();
-            }
-            else
-            {
                 throw new NoSuchElementException();
             }
         }

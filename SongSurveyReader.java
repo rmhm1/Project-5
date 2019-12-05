@@ -41,7 +41,11 @@ public class SongSurveyReader {
         
     }
 
-
+    public LinkedList<Song> getSongs()
+    {
+        return songs;
+    }
+    
     /**
      * Prints what is needed for Intermediate Submission
      */

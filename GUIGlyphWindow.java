@@ -83,8 +83,9 @@ public class GUIGlyphWindow {
     
     
     /**
-     *  This method assembles the legend. It will be cleaned up in the 
-     *  future please excuse the mess I'm so sorry :(
+     *  This method assembles the legend. 
+     *  @param enumInt
+     *      designates which legend to display
      */
     private void paintLegend(int enumInt)
     {
@@ -96,12 +97,28 @@ public class GUIGlyphWindow {
                 enums[2] = "Art";
                 enums[3] = "Sports";
                 enums[4] = "Music";
+                break;
+            case 2:
+                enums[0] = "Region";
+                enums[1] = "NE US";
+                enums[2] = "SE US";
+                enums[3] = "US other";
+                enums[4] = "Outside US";
+                break;
+            case 3:
+                enums[0] = "Major";
+                enums[1] = "CS";
+                enums[2] = "Other Engineering";
+                enums[3] = "Math or CMDA";
+                enums[4] = "Other";
+                break;
             default:
                 enums[0] = "Hobby";
                 enums[1] = "Read";
                 enums[2] = "Art";
                 enums[3] = "Sports";
                 enums[4] = "Music";
+                break;
         }
         
         Shape legend = new Shape(810, 400, 290, 200, Color.black);
@@ -186,8 +203,7 @@ public class GUIGlyphWindow {
     
  // -----------------------------------------------------------
     /**
-     * TO-DO: these methods are not attatched to the front end
-     * yet, but will define behavior for each button when clicked.
+     * Sort by major when this button is clicked.
      * 
      * @param button
      *              Button to trigger this behavior.
@@ -199,13 +215,13 @@ public class GUIGlyphWindow {
         Iterator<LinkedList<Glyph>> iter = currPages.iterator();
         paintGlyphs(iter.next());
         prev.disable();
+        next.enable();
     }
     
     
  // -----------------------------------------------------------
     /**
-     * TO-DO: these methods are not attatched to the front end
-     * yet, but will define behavior for each button when clicked.
+     *  Sort by region when this button is clicked.
      * 
      * @param button
      *              Button to trigger this behavior.
@@ -216,14 +232,13 @@ public class GUIGlyphWindow {
         currPage = 1;
         Iterator<LinkedList<Glyph>> iter = currPages.iterator();
         paintGlyphs(iter.next());
-        paintLegend(2);
         prev.disable();
+        next.enable();
     }
     
  // -----------------------------------------------------------
     /**
-     * TO-DO: these methods are not attatched to the front end
-     * yet, but will define behavior for each button when clicked.
+     *  Sort by hobby when this button is clicked.
      * 
      * @param button
      *              Button to trigger this behavior.
@@ -234,14 +249,13 @@ public class GUIGlyphWindow {
         currPage = 1;
         Iterator<LinkedList<Glyph>> iter = currPages.iterator();
         paintGlyphs(iter.next());
-        paintLegend(1);
         prev.disable();
+        next.enable();
     }
     
  // -----------------------------------------------------------
     /**
-     * TO-DO: these methods are not attatched to the front end
-     * yet, but will define behavior for each button when clicked.
+     *  Sort by title when this button is clicked.
      * 
      * @param button
      *              Button to trigger this behavior.
@@ -251,15 +265,14 @@ public class GUIGlyphWindow {
         currPage = 1;
         Iterator<LinkedList<Glyph>> iter = currPages.iterator();
         paintGlyphs(iter.next());
-        paintLegend(1);
         prev.disable();
+        next.enable();
     }
     
     
  // -----------------------------------------------------------
     /**
-     * TO-DO: these methods are not attatched to the front end
-     * yet, but will define behavior for each button when clicked.
+     *  Sort by artist when this button is clicked.
      * 
      * @param button
      *              Button to trigger this behavior.
@@ -269,15 +282,14 @@ public class GUIGlyphWindow {
         currPage = 1;
         Iterator<LinkedList<Glyph>> iter = currPages.iterator();
         paintGlyphs(iter.next());
-        paintLegend(1);
         prev.disable();
+        next.enable();
     }
     
     
  // -----------------------------------------------------------
     /**
-     * TO-DO: these methods are not attatched to the front end
-     * yet, but will define behavior for each button when clicked.
+     *  Sort by date when this button is clicked.
      * 
      * @param button
      *              Button to trigger this behavior.
@@ -287,8 +299,8 @@ public class GUIGlyphWindow {
         currPage = 1;
         Iterator<LinkedList<Glyph>> iter = currPages.iterator();
         paintGlyphs(iter.next());
-        paintLegend(1);
         prev.disable();
+        next.enable();
     }
     
  // -----------------------------------------------------------
@@ -304,14 +316,13 @@ public class GUIGlyphWindow {
         currPage = 1;
         Iterator<LinkedList<Glyph>> iter = currPages.iterator();
         paintGlyphs(iter.next());
-        paintLegend(1);
         prev.disable();
+        next.enable();
     }
     
  // -----------------------------------------------------------
     /**
-     * TO-DO: these methods are not attatched to the front end
-     * yet, but will define behavior for each button when clicked.
+     * Go to next pagewhen this button is cliked.
      * 
      * @param button
      *              Button to trigger this behavior.
@@ -338,8 +349,7 @@ public class GUIGlyphWindow {
     
  // -----------------------------------------------------------
     /**
-     * TO-DO: these methods are not attatched to the front end
-     * yet, but will define behavior for each button when clicked.
+     * Go to previous page when this button is clicked
      * 
      * @param button
      *              Button to trigger this behavior.
@@ -363,8 +373,7 @@ public class GUIGlyphWindow {
     
  // -----------------------------------------------------------
     /**
-     * TO-DO: this method will remove all shapes, then call assemble
-     * glyphGlyphRow three times with the glyphs for each row.
+     * Paint the glyphs and legend after removing all other shapes
      * 
      * @param glyphs
      *          The linked list of glyphs to paint.
@@ -388,7 +397,13 @@ public class GUIGlyphWindow {
     }
         
    
-
+    // -----------------------------------------------------------
+    /**
+     * Split the glyphs into differnet pages
+     * 
+     * @param glyphs
+     *          The linked list of glyphs to split.
+     */
     private void assemblePages(LinkedList<Glyph> glyphs)
     {
         LinkedList<LinkedList<Glyph>> pages =  new LinkedList<LinkedList<Glyph>>(); 
@@ -409,7 +424,7 @@ public class GUIGlyphWindow {
     
  // -----------------------------------------------------------
     /**
-     * TO-DO: this method will add a glyph at the indicated position.
+     * add a glyph at the indicated position.
      * 
      * @param row
      *                  The row number (1, 2, or 3)
@@ -440,7 +455,13 @@ public class GUIGlyphWindow {
         window.addShape(bar);
     }
     
-    
+    // -----------------------------------------------------------
+    /**
+     * Adds the song name and artist for the glyph.
+     * 
+     * @param glyphs
+     *          The linked list of glyphs to paint.
+     */
     private void addGlyphText(Glyph glyph, int x, int y)
     {
         String name = glyph.getSong().getName();
@@ -458,6 +479,20 @@ public class GUIGlyphWindow {
         window.addShape(artistName);
     }
     
+    // -----------------------------------------------------------
+    /**
+     * Paints a listener bar for a glyph.
+     * 
+     * 
+     * @param x
+     *          x-coordinate
+     * @param y
+     *          y-coordinate
+     * @param listeners
+     *      The number of listeners (as a percent)
+     * @param color
+     *      The color of the bar
+     */
     private void makeListenerBar(int x, int y, int listeners, Color color)
     {
         double listener = (double) listeners / 100;
@@ -469,6 +504,21 @@ public class GUIGlyphWindow {
         window.addShape(bar);
     }
     
+    
+    // -----------------------------------------------------------
+    /**
+     * Paints a fan bar for a glyph.
+     * 
+     * 
+     * @param x
+     *          x-coordinate
+     * @param y
+     *          y-coordinate
+     * @param fans
+     *      The number of fans (as a percent)
+     * @param color
+     *      The color of the bar
+     */
     private void makeFanBar(int x, int y, int fans, Color color)
     {
         double fan = (double) fans / 100;

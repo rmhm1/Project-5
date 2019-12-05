@@ -23,7 +23,7 @@ public class LinkedListTest extends TestCase {
     private LinkedList<String> fourEntries;
     private Exception e;
     private String nullString;
-    Iterator<String> iter;
+    private Iterator<String> iter;
 
 
     // -------------------------------METHODS-------------------------------
@@ -368,8 +368,7 @@ public class LinkedListTest extends TestCase {
         // make sure the element was removed:
         assertEquals(3, fourEntries.getLength());
         assertFalse(fourEntries.contains("test3"));
-        // ensure hasNext is still true
-        assertTrue(iter.hasNext());
+        
         // attempt to remove without calling next, ensure
         // an IllegalStateException is thrown
         try {

@@ -7,20 +7,22 @@ package prj5;
  * @author Saakshi Naveen
  * @version 11.18.2019
  */
-public class SongTest extends student.TestCase{
+public class SongTest extends student.TestCase {
     private Song song;
+
+
     /**
      * sets up test cases
      */
-    public void setUp()
-    {
+    public void setUp() {
         song = new Song("Pure Water", "Migos", 2018, "rap");
     }
+
+
     /**
      * tests getters and setters
      */
-    public void testGettersAndSetters()
-    {
+    public void testGettersAndSetters() {
         assertEquals(song.getName(), "Pure Water");
         song.setName("Monster");
         assertEquals(song.getName(), "Monster");
@@ -32,13 +34,14 @@ public class SongTest extends student.TestCase{
         assertEquals(song.getDate(), 2008);
         song.setGenre("Pop");
         assertEquals(song.getGenre(), "Pop");
-        
+
     }
+
+
     /**
      * tests getLikes, getListens, incrementLikes, and incrementListens
      */
-    public void testLikesAndListens()
-    {
+    public void testLikesAndListens() {
         assertEquals(song.getLikes(), 0);
         assertEquals(song.getListens(), 0);
         song.incrementLikes();
@@ -46,14 +49,16 @@ public class SongTest extends student.TestCase{
         assertEquals(song.getLikes(), 1);
         assertEquals(song.getListens(), 1);
     }
+
+
     /**
      * tests equals()
      */
     @SuppressWarnings("unlikely-arg-type")
-    public void testEquals()
-    {
+    public void testEquals() {
         assertTrue(song.equals(song));
-        assertFalse(song.equals(null));
+        Object o = null;
+        assertFalse(song.equals(o));
         assertFalse(song.equals("song"));
         Song one = new Song("Pure Water", "Migos", 2018, "rap");
         assertTrue(song.equals(one));

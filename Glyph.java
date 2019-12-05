@@ -10,7 +10,7 @@ package prj5;
 import java.util.Iterator;
 
 /**
- * Glyph object for  song, includes a list of listener
+ * A Glyph object is created for each song, and includes a list of listener
  * and fan attributes as well as int arrays for the number students
  * in each category of major, hobby, or region, which can be changed
  * and accessed.
@@ -46,8 +46,7 @@ public class Glyph {
         Iterator<Student> iter = students.iterator();
         while (iter.hasNext()) {
             Student current = iter.next();
-           LinkedList<Song> liked = current.getLikedSongs();
-           
+
             if (likesSong(current)) {
                 addFan(current);
             }
@@ -70,10 +69,7 @@ public class Glyph {
      *         True, if the student likes the song.
      */
     private boolean likesSong(Student fan) {
-        if (fan.getLikedSongs().contains(song)) {
-            return true;
-        }
-        return false;
+        return (fan.getLikedSongs().contains(song));
     }
 
     // =======================end of method=======================
@@ -103,11 +99,9 @@ public class Glyph {
      *         True, if the student has heard the song.
      */
     private boolean heardSong(Student listener) {
-        if (listener.getHeardSongs().contains(song)) {
-            
-            return true;
-        }
-        return false;
+        return (listener.getHeardSongs().contains(song));
+
+           
     }
 
     // =======================end of method=======================
@@ -151,11 +145,9 @@ public class Glyph {
      *            listener to add.
      */
     private void addFan(Student fan) {
-        if (fan != null && fan.getAttributes()!= null)
-        {
         Attributes studentAttributes = fan.getAttributes();
         fanAttributes.add(studentAttributes);
-        }
+
     }
 
     // =======================end of method=======================
@@ -261,13 +253,10 @@ public class Glyph {
         if (otherGlyph.getSong() != song) {
             return false;
         }
-        if (otherGlyph.getFans() != fanAttributes) {
-            return false;
-        }
-        if (otherGlyph.getListeners() != listenerAttributes) {
-            return false;
-        }
-        return true;
+        
+        return (otherGlyph.getListeners() == listenerAttributes &&
+            otherGlyph.getFans() == fanAttributes); 
+        
     }
 
     // =======================end of method=======================
